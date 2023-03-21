@@ -1087,6 +1087,7 @@ Format_free(FormatExpressionT *self) {
     free(self);
 }
 
+// TODO: Fix the current formatting options and add extra
 StringT *
 Format_string(FormatExpressionT *self, const StringT *string) {
     StringT *formatted_string = String_new(0);
