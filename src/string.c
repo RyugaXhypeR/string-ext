@@ -166,7 +166,7 @@ String_copy(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hello, World");
-/// printf("%s", string->string); // Hello, World
+/// string->string // Hello, World
 /// String_free(string);
 /// ```
 void
@@ -196,7 +196,7 @@ String_from(const char *_string) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hello, World!");
-/// char c = String_index(string, 0); // 'H'
+/// char c = String_index(string, 0);  // 'H'
 /// char c = String_index(string, -1); // '!'
 /// ```
 char
@@ -215,9 +215,9 @@ String_index(const StringT *self, ssize_t index) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hello, World!");
-/// StringT *slice = String_slice(string, 0, 5, 1); // `Hello`
+/// StringT *slice = String_slice(string, 0, 5, 1);   // `Hello`
 /// StringT *slice = String_slice(string, 5, -1, -1); // `olleH`
-/// StringT *slice = String_slice(string, 0, 5, 2); // `Hlo`
+/// StringT *slice = String_slice(string, 0, 5, 2);   // `Hlo`
 /// ``
 StringT *
 String_slice(const StringT *self, StringIndexT index) {
@@ -336,7 +336,6 @@ String_contains(const StringT *self, const StringT *other) {
         if (String_index(self, i) == String_index(other, 0) &&
             String_index(self, i + offset) == String_index(other, -1)) {
             index = (StringIndexT){i, i + other->length, 1};
-            printf("%s", String_slice(self, index)->string);
 
             if (String_equals(String_slice(self, index), other)) return index;
         }
@@ -354,7 +353,7 @@ String_contains(const StringT *self, const StringT *other) {
 /// ```c
 /// StringT *string = String_from("Hello, World!");
 /// StringT *sub_string = String_from("World");
-/// String_contains_in_range(string, sub_string, (StringIndexT){0, 5, 1}); // false
+/// String_contains_in_range(string, sub_string, (StringIndexT){0, 5, 1});  // false
 /// String_contains_in_range(string, sub_string, (StringIndexT){0, 12, 1}); // true
 /// ```
 StringIndexT
@@ -489,24 +488,13 @@ String_split_lines(const StringT *self) {
 ///
 /// # Example
 /// ```c
-/// StringT *string = String_from("Apple Banana Mango\n        \
+/// StringT *string = String_from("Apple       Banana   Mango\n \
 ///                                Cauliflower Broccoli Cabbage");
 /// StringIteratorT *string_iterator = String_split_whitespace(string);
 /// StringT *word;
 ///
 /// while (word = StringIterator_next(string_iterator))
-///     printf("%s\n", word);
-///
-/// ```
-///
-/// ## Output
-/// ```
-/// Apple
-/// Banana
-/// Mango
-/// Cauliflower
-/// Broccoli
-/// Cabbage
+///     word->string; // "Apple", "Banana", "Mango", "Cauliflower", "Broccoli", "Cabbage"
 /// ```
 StringIteratorT *
 String_split_whitespace(const StringT *self) {
@@ -534,7 +522,7 @@ String_split_whitespace(const StringT *self) {
 /// StringT *string = String_from("Hello, World");
 /// StringIteratorT *string_iterator = String_split(string, String_from(", "));
 /// StringT *joined_string = String_join(string_iterator, String_from(" "));
-/// printf("%s", joined_string->string); // Hello World
+/// joined_string->string // Hello World
 /// ```
 StringT *
 String_join(StringIteratorT *self, const StringT *delimiter) {
@@ -575,7 +563,7 @@ String_check_equals_in_range(const StringT *self, const StringT *other,
 /// ```c
 /// StringT *string = String_from("Hello, World");
 /// StringT *prefix = String_from("Hello");
-/// printf("%d", String_starts_with(string, prefix)); // 1
+/// String_starts_with(string, prefix) // true
 /// ```
 bool
 String_starts_with(const StringT *self, const StringT *prefix) {
@@ -589,7 +577,7 @@ String_starts_with(const StringT *self, const StringT *prefix) {
 /// ```c
 /// StringT *string = String_from("Hello, World");
 /// StringT *suffix = String_from("World");
-/// printf("%d", String_ends_with(string, suffix)); // 1
+/// String_ends_with(string, suffix) // true
 /// ```
 bool
 String_ends_with(const StringT *self, const StringT *suffix) {
@@ -604,7 +592,7 @@ String_ends_with(const StringT *self, const StringT *suffix) {
 /// ```c
 /// StringT *string = String_from("Hello, World");
 /// StringT *reversed_string = String_reverse(string);
-/// printf("%s", reversed_string->string); // dlroW ,olleH
+/// reversed_string->string // dlroW ,olleH
 /// ```
 StringT *
 String_reverse(const StringT *self) {
@@ -618,7 +606,7 @@ String_reverse(const StringT *self) {
 /// ```c
 /// StringT *string = String_from("Hello, World");
 /// StringT *upper_string = String_to_upper(string);
-/// printf("%s", upper_string->string); // HELLO, WORLD
+/// upper_string->string // HELLO, WORLD
 /// ```
 StringT *
 String_to_upper(const StringT *self) {
@@ -638,7 +626,7 @@ String_to_upper(const StringT *self) {
 /// ```c
 /// StringT *string = String_from("Hello, World");
 /// StringT *lower_string = String_to_lower(string);
-/// printf("%s", lower_string->string); // hello, world
+/// lower_string->string // hello, world
 /// ```
 StringT *
 String_to_lower(const StringT *self) {
@@ -657,7 +645,7 @@ String_to_lower(const StringT *self) {
 /// ```c
 /// StringT *string = String_from("Hello, World");
 /// StringT *lower_string = String_to_lower(string);
-/// printf("%s", lower_string->string); // hello, world
+/// lower_string->string // hello, world
 /// ```
 StringT *
 String_to_title(const StringT *self) {
@@ -684,7 +672,7 @@ String_to_title(const StringT *self) {
 /// ```c
 /// StringT *string = String_from("hello, world");
 /// StringT *capitalized_string = String_to_capitalize(string);
-/// printf("%s", capitalized_string->string); // `Hello, world`
+/// capitalized_string->string // Hello, world
 /// ```
 StringT *
 String_to_capitalize(const StringT *self) {
@@ -704,7 +692,7 @@ String_to_capitalize(const StringT *self) {
 /// ```c
 /// StringT *string = String_from("Hello, World");
 /// StringT *swapped_string = String_swap_case(string);
-/// printf("%s", swapped_string->string); // `hELLO, wORLD`
+/// swapped_string->string // hELLO, wORLD
 /// ```
 StringT *
 String_swap_case(const StringT *self) {
@@ -723,7 +711,7 @@ String_swap_case(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hello, World");
-/// printf("%d", String_is_alphanumeric(string)); // `0`
+/// String_is_alphanumeric(string) // false
 /// ```
 bool
 String_is_alphanumeric(const StringT *self) {
@@ -739,7 +727,7 @@ String_is_alphanumeric(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hello World");
-/// printf("%d", String_is_alphabetic(string)); // `1`
+/// String_is_alphabetic(string) // false
 /// ```
 bool
 String_is_alphabetic(const StringT *self) {
@@ -755,7 +743,7 @@ String_is_alphabetic(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("HELLO WORLD");
-/// printf("%d", String_is_uppercase(string)); // `1`
+/// String_is_uppercase(string) // true
 /// ```
 bool
 String_is_uppercase(const StringT *self) {
@@ -771,7 +759,7 @@ String_is_uppercase(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("hello world");
-/// printf("%d", String_is_uppercase(string)); // `1`
+/// String_is_lowercase(string) // false
 /// ```
 bool
 String_is_lowercase(const StringT *self) {
@@ -787,7 +775,7 @@ String_is_lowercase(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("12345");
-/// printf("%d", String_is_numeric(string)); // `1`
+/// String_is_numeric(string) // true
 /// ```
 bool
 String_is_numeric(const StringT *self) {
@@ -803,7 +791,7 @@ String_is_numeric(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("123.45");
-/// printf("%d", String_is_decimal(string)); // `1`
+/// String_is_decimal(string) // true
 /// ```
 bool
 String_is_decimal(const StringT *self) {
@@ -826,7 +814,7 @@ String_is_decimal(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from(" ");
-/// printf("%d", String_is_whitespace(string)); // `1`
+/// String_is_whitespace(string) // true
 /// ```
 bool
 String_is_whitespace(const StringT *self) {
@@ -842,7 +830,7 @@ String_is_whitespace(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("  Hello, World ");
-/// printf("%s", String_trim_whitespace(string)->string); // `Hello, World`
+/// String_trim_whitespace(string)->string // Hello, World
 /// ```
 StringT *
 String_trim_whitespace(const StringT *self) {
@@ -855,7 +843,7 @@ String_trim_whitespace(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("  Hello, World ");
-/// printf("%s", String_trim_whitespace(string)->string); // `Hello, World `
+/// String_trim_whitespace(string)->string // `Hello, World `
 /// ```
 StringT *
 String_trim_left(const StringT *self) {
@@ -871,7 +859,7 @@ String_trim_left(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("  Hello, World ");
-/// printf("%s", String_trim_whitespace(string)->string); // `  Hello, World`
+/// String_trim_whitespace(string)->string // `  Hello, World`
 /// ```
 StringT *
 String_trim_right(const StringT *self) {
@@ -887,7 +875,7 @@ String_trim_right(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hi");
-/// printf("%s", String_centre(string, 4)); ` Hi `
+/// String_centre(string, 4)->string // ` Hi `
 /// ```
 StringT *
 String_centre(const StringT *self, ssize_t width) {
@@ -903,7 +891,7 @@ String_centre(const StringT *self, ssize_t width) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hi");
-/// printf("%s", String_left_justify(string, 4)); `Hi  `
+/// String_left_justify(string, 4) // `Hi  `
 /// ```
 StringT *
 String_left_justify(const StringT *self, ssize_t width) {
@@ -922,7 +910,7 @@ String_left_justify(const StringT *self, ssize_t width) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hi");
-/// printf("%s", String_right_justify(string, 4)); `  Hi`
+/// String_right_justify(string, 4) // `  Hi`
 /// ```
 StringT *
 String_right_justify(const StringT *self, ssize_t width) {
@@ -941,13 +929,9 @@ String_right_justify(const StringT *self, ssize_t width) {
 /// ```c
 /// StringT *string = String_from("Hello, World");
 /// StringIteratorT *iterator = String_chunks(string, 3);
-/// for (StringT *chunk = StringIterator_next(iterator); chunk != NULL; chunk =
-/// StringIterator_next(iterator))
-/// printf("%s", chunk->string);
-///    // `Hel`
-///    // `lo,`
-///    // ` Wo`
-///    // `rld`
+///
+/// while (StringIterator_next(iterator))
+///    StringIterator_get(iterator); // `Hel`, `lo,`, ` Wo`, `rld`
 /// ```
 StringIteratorT *
 Stirng_chunks(const StringT *self, ssize_t chunk_size) {
@@ -980,7 +964,6 @@ Token_get_next(TokenT *self) {
     int is_curly_brace_open = 0;
 
     for (ssize_t i = self->iterator->start; i < self->unformatted_string->length; ++i) {
-        // printf("%c %ld", self->unformatted_string->string[i], i);
         switch (self->unformatted_string->string[i]) {
             case FORMAT_EXPRESSION_START:
                 self->iterator->start = i + 1;
@@ -1044,12 +1027,10 @@ typedef struct {
 FormatExpressionT *
 Format_new(TokenT *token) {
     FormatExpressionT *format = malloc(sizeof *format);
-    printf("%s\n", String_slice(token->unformatted_string, *token->iterator)->string);
     StringIteratorT *split = String_split(
         String_slice(token->unformatted_string, *token->iterator), String_from(":"));
     StringT *type_str = StringIterator_next(split);
     StringT *options = StringIterator_next(split);
-    printf("%zd\n", split->length);
     FormatTypes type;
 
     switch (type_str->string[0]) {
@@ -1095,7 +1076,6 @@ Format_string(FormatExpressionT *self, const StringT *string) {
     for (ssize_t i = 0, current = i; i < self->options->length; ++i) {
         switch (self->options->string[i]) {
             case '^':
-                printf("centre\n");
                 while (self->options->string[i] != ',' && i < self->options->length) {
                     i++;
                 }
