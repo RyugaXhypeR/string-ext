@@ -82,4 +82,7 @@ const StringT *StringIterator_get(StringIteratorT *self);
 void StringIterator_append(StringIteratorT *self, const StringT *string);
 void StringIterator_free(StringIteratorT *self);
 
+/* StringIndexT */
+StringIndexT StringIndex_new(ssize_t start, ssize_t stop, ssize_t step);
+
 #endif /* STRING_H */
