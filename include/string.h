@@ -18,7 +18,7 @@ typedef struct {
 } StringIndexT;
 
 typedef struct {
-    StringT **strings;
+    const StringT **strings;
 
     ssize_t index;
     ssize_t length;
@@ -48,6 +48,7 @@ StringIteratorT *String_split_lines(const StringT *self);
 StringIteratorT *String_split_whitespace(const StringT *self);
 StringIteratorT *String_split_limit(const StringT *self, const StringT *delimiter,
                                     ssize_t limit);
+StringT *String_copy(const StringT *self);
 StringT *String_join(StringIteratorT *self, const StringT *delimiter);
 StringT *String_slice(const StringT *self, StringIndexT index);
 StringT *String_concatenate(const StringT *self, const StringT *other);
@@ -76,9 +77,9 @@ void String_free(StringT *self);
 
 /* StringIteratorT */
 StringIteratorT *StirngIterator_new();
-StringT *StringIterator_next(StringIteratorT *self);
-StringT *StringIterator_get(StringIteratorT *self);
-void StringIterator_append(StringIteratorT *self, StringT *string);
+const StringT *StringIterator_next(StringIteratorT *self);
+const StringT *StringIterator_get(StringIteratorT *self);
+void StringIterator_append(StringIteratorT *self, const StringT *string);
 void StringIterator_free(StringIteratorT *self);
 
 #endif /* STRING_H */
