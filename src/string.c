@@ -385,7 +385,7 @@ String_contains(const StringT *self, const StringT *other) {
 /// ```
 StringIndexT
 String_contains_in_range(const StringT *self, const StringT *other, StringIndexT index) {
-    StringIndexT not_found = StringIndex_new(0, 0, 1);
+    StringIndexT not_found = StringIndex(0, 0, 1);
     StringIndexT slice_index;
     ssize_t offset = other->length - 1;
 
@@ -402,7 +402,7 @@ String_contains_in_range(const StringT *self, const StringT *other, StringIndexT
             for (j = 1; j < other->length; ++j)
                 if (self->string[i + j] != other->string[j]) break;
 
-            if (j == other->length) return StringIndex_new(i, i + j - 1, 1);
+            if (j == other->length) return StringIndex(i, i + j - 1);
         }
     }
 
@@ -461,15 +461,14 @@ String_split_with_limit(const StringT *self, const StringT *delimiter, ssize_t l
     // then append it to the list, then set the start value to current stop value
     // and continue unit the delimiter is not found or `limit` is exhausted
     while (index.stop && limit--) {
-        slice_index = StringIndex_new(start, index.start, 1);
+        slice_index = StringIndex(start, index.start);
         StringIterator_append(iterator, String_slice(self, slice_index));
         start = index.stop;
-        index = String_contains_in_range(self, delimiter,
-                                         StringIndex_new(start, self->length, 1));
+        index =
+            String_contains_in_range(self, delimiter, StringIndex(start, self->length));
     }
 
-    StringIterator_append(iterator,
-                          String_slice(self, StringIndex_new(start, self->length, 1)));
+    StringIterator_append(iterator, String_slice(self, StringIndex(start, self->length)));
 
     return iterator;
 }
@@ -593,8 +592,7 @@ String_check_equals_in_range(const StringT *self, const StringT *other,
 /// ```
 bool
 String_starts_with(const StringT *self, const StringT *prefix) {
-    return String_check_equals_in_range(self, prefix,
-                                        StringIndex_new(0, prefix->length, 1));
+    return String_check_equals_in_range(self, prefix, StringIndex(prefix->length));
 }
 
 /// Check if the string ends with the provided suffix.
@@ -608,7 +606,7 @@ String_starts_with(const StringT *self, const StringT *prefix) {
 bool
 String_ends_with(const StringT *self, const StringT *suffix) {
     return String_check_equals_in_range(
-        self, suffix, StringIndex_new(self->length - suffix->length, self->length, 1));
+        self, suffix, StringIndex(self->length - suffix->length, self->length));
 }
 
 /// Reverse the string.
@@ -622,7 +620,7 @@ String_ends_with(const StringT *self, const StringT *suffix) {
 /// ```
 StringT *
 String_reverse(const StringT *self) {
-    return String_slice(self, StringIndex_new(self->length - 1, -1, -1));
+    return String_slice(self, StringIndex(self->length - 1, -1, -1));
 }
 
 /// Convert the string to uppercase.
@@ -874,7 +872,7 @@ StringT *
 String_trim_left(const StringT *self) {
     for (ssize_t i = 0; i < self->length; ++i)
         if (!CHAR_IS_WHITESPACE(self->string[i]))
-            return String_slice(self, StringIndex_new(i, self->length, 1));
+            return String_slice(self, StringIndex(i, self->length));
     return String_copy(self);
 }
 
@@ -890,7 +888,7 @@ StringT *
 String_trim_right(const StringT *self) {
     for (ssize_t i = self->length - 1; i >= 0; ++i)
         if (!CHAR_IS_WHITESPACE(self->string[i]))
-            return String_slice(self, StringIndex_new(0, self->length - i, 1));
+            return String_slice(self, StringIndex(self->length - i));
     return String_copy(self);
 }
 
@@ -964,7 +962,7 @@ Stirng_chunks(const StringT *self, ssize_t chunk_size) {
 
     for (ssize_t i = 0; i < self->length; i += chunk_size)
         StringIterator_append(iterator,
-                              String_slice(self, StringIndex_new(i, i + chunk_size, 1)));
+                              String_slice(self, StringIndex(i, i + chunk_size)));
 
     return iterator;
 }
