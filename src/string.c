@@ -162,16 +162,6 @@ String_push(StringT *self, char ch) {
     self->length++;
 }
 
-static void
-String_shift_left(const StringT *self, ssize_t index, ssize_t length) {
-    for (ssize_t i = index; i < length; i++) self->string[i] = self->string[i + 1];
-}
-
-static void
-String_shift_right(const StringT *self, ssize_t index, ssize_t length) {
-    for (ssize_t i = length; i > index; i--) self->string[i] = self->string[i - 1];
-}
-
 /// Create an empty `StringT` object with the given size
 ///
 /// # Example
@@ -185,8 +175,9 @@ String_new(ssize_t size) {
     return self;
 }
 
+/// Create StrngT object from string array of given length.
 static StringT *
-String_from_char_array_with_length(const char *string, size_t length) {
+String_from_char_array_with_length(const char *string, ssize_t length) {
     char *new_string = malloc((length + 1) * sizeof *new_string);
     StringT *self = malloc(sizeof *self);
 
@@ -198,6 +189,7 @@ String_from_char_array_with_length(const char *string, size_t length) {
     return self;
 }
 
+/// Copy the `StringT` object.
 StringT *
 String_copy(const StringT *self) {
     return String_from(self->string);
@@ -264,7 +256,6 @@ String_index(const StringT *self, ssize_t index) {
 StringT *
 String_slice(const StringT *self, StringIndexT index) {
     StringT *slice = String_new(0);
-    ssize_t start;
 
     // Calculate the length of this range and iterate that many times
     int slice_length = (index.stop - index.start) / index.step;
@@ -366,24 +357,7 @@ String_equals(const StringT *self, const StringT *other) {
 /// ```
 StringIndexT
 String_contains(const StringT *self, const StringT *other) {
-    StringIndexT index;
-    StringIndexT not_found = (StringIndexT){0, 0, 1};
-    ssize_t offset = other->length - 1;
-
-    if (self->length < other->length) return not_found;
-
-    for (ssize_t i = 0; i < self->length - offset; ++i) {
-        // Checking if the first and last characters match
-        // If so, then we construct a slice and check for equality
-        if (String_index(self, i) == String_index(other, 0) &&
-            String_index(self, i + offset) == String_index(other, -1)) {
-            index = (StringIndexT){i, i + other->length, 1};
-
-            if (String_equals(String_slice(self, index), other)) return index;
-        }
-    }
-
-    return not_found;
+    return String_contains_in_range(self, other, (StringIndexT){0, self->length, 1});
 }
 
 /// Check if `other` string is contained within the specified range in the original string
@@ -411,16 +385,16 @@ String_contains_in_range(const StringT *self, const StringT *other, StringIndexT
 
     if (index.stop - index.start < other->length) return not_found;
 
-    for (ssize_t i = index.start; i < index.stop - offset; ++i) {
-        // Checking if the first and last characters match
-        // If so, then we construct a slice and check for equality
-        if (String_index(self, i) == String_index(other, 0) &&
-            String_index(self, i + offset) == String_index(other, -1)) {
-            slice_index = (StringIndexT){i, i + other->length, 1};
+    for (ssize_t i = index.start; i < index.stop; ++i) {
+        if (self->string[i] == other->string[0]) {
+            ssize_t j;
+            for (j = 1; j < other->length; ++j)
+                if (self->string[i + j] != other->string[j]) break;
 
-            if (String_equals(String_slice(self, slice_index), other)) return slice_index;
+            if (j == other->length) return StringIndex_new(i, i + j - 1, 1);
         }
     }
+
     return not_found;
 }
 
@@ -530,8 +504,8 @@ String_split_lines(const StringT *self) {
 ///
 /// # Example
 /// ```c
-/// StringT *string = String_from("Apple       Banana   Mango\n \
-///                                Cauliflower Broccoli Cabbage");
+/// StringT *string = String_from("Apple       Banana   Mango\n"
+///                               "Cauliflower Broccoli Cabbage");
 /// StringIteratorT *string_iterator = String_split_whitespace(string);
 /// StringT *word;
 ///
@@ -540,7 +514,6 @@ String_split_lines(const StringT *self) {
 /// ```
 StringIteratorT *
 String_split_whitespace(const StringT *self) {
-    char ch;
     StringIteratorT *iterator = StringIterator_new();
     StringT *string = String_new(0);
 
@@ -739,7 +712,6 @@ String_to_capitalize(const StringT *self) {
 StringT *
 String_swap_case(const StringT *self) {
     StringT *new_string = String_copy(self);
-    char ch;
 
     for (ssize_t i = 0; i < new_string->length; ++i)
         CHAR_SWAP_CASE(new_string->string[i]);
