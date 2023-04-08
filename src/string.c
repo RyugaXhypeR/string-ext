@@ -82,6 +82,54 @@ StringIterator_append(StringIteratorT *self, const StringT *string) {
 }
 
 /* ------------------------------ StringIndexT ------------------------------ */
+
+/// Helper macro to initialize `StringIndexT` object.
+/// When only one argument is passed, it is used as `stop` and `start` is set to 0.
+/// When two arguments are passed, they are used as `start` and `stop` respectively.
+/// When three arguments are passed, they are used as `start`, `stop` and `step`
+/// respectively.
+///
+/// # Example
+/// ```c
+/// StringIndexT index_with_stop = StringIndex(10);
+/// StringIndexT index_with_start_stop = StringIndex(0, 10);
+/// StringIndexT index_with_start_stop_step = StringIndex(0, 10, 2);
+/// ```
+#define StringIndex(...) StringIndex__init__(_VA_NARGS(__VA_ARGS__), __VA_ARGS__)
+
+StringIndexT
+StringIndex__init__(size_t nargs, ...) {
+    va_list args;
+    va_start(args, nargs);
+
+    ssize_t start, stop, step;
+
+    switch (nargs) {
+        case 1:
+            start = 0;
+            stop = va_arg(args, ssize_t);
+            step = 1;
+            break;
+        case 2:
+            start = va_arg(args, ssize_t);
+            stop = va_arg(args, ssize_t);
+            step = 1;
+            break;
+        case 3:
+            start = va_arg(args, ssize_t);
+            stop = va_arg(args, ssize_t);
+            step = va_arg(args, ssize_t);
+            break;
+        default:
+            fprintf(stderr, "Invalid number of arguments");
+            exit(EXIT_FAILURE);
+    }
+
+    va_end(args);
+
+    return StringIndex_new(start, stop, step);
+}
+
 StringIndexT
 StringIndex_new(ssize_t start, ssize_t stop, ssize_t step) {
     if (step == 0) {
@@ -89,12 +137,6 @@ StringIndex_new(ssize_t start, ssize_t stop, ssize_t step) {
         exit(EXIT_FAILURE);
     }
     return (StringIndexT){.start = start, .stop = stop, .step = step};
-}
-
-static void
-StringIndex_convert_to_postive(StringIndexT self, size_t length) {
-    self.start = negative_index_to_positive(self.start, length);
-    self.stop = negative_index_to_positive(self.stop, length);
 }
 
 /* ------------------------------ StringT ------------------------------ */
