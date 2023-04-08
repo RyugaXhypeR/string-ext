@@ -45,23 +45,23 @@ c_string_length(const char *string) {
 /* ------------------------------ StringIteratorT ------------------------------ */
 
 /// Iterator for `StringT` object.
-/// Basically a vector storing the stirngs.
+/// Meant to be used to iterate over multiple `const StringT` objects.
 StringIteratorT *
 StringIterator_new() {
     StringIteratorT *self = malloc(sizeof *self);
-    StringT **string_array = malloc(sizeof **string_array);
+    const StringT **string_array = malloc(sizeof **string_array);
     *self = (StringIteratorT){
         .strings = string_array, .index = 0, .length = 0, .allocated = 1};
     return self;
 }
 
-StringT *
+const StringT *
 StringIterator_next(StringIteratorT *self) {
     if (self->index >= self->length) return NULL;
     return self->strings[self->index++];
 }
 
-StringT *
+const StringT *
 StringIterator_get(StringIteratorT *self) {
     return *self->strings;
 }
@@ -73,7 +73,7 @@ StringIterator_free(StringIteratorT *self) {
 }
 
 void
-StringIterator_append(StringIteratorT *self, StringT *string) {
+StringIterator_append(StringIteratorT *self, const StringT *string) {
     if (self->length >= self->allocated) {
         self->allocated <<= 1;
         self->strings = realloc(self->strings, self->allocated * sizeof *self->strings);
