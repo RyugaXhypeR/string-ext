@@ -1,5 +1,6 @@
 #include "../include/string.h"
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -83,6 +84,10 @@ StringIterator_append(StringIteratorT *self, const StringT *string) {
 
 /* ------------------------------ StringIndexT ------------------------------ */
 
+
+// Helper macro to get number of arguments passed to a macro.
+#define __NUM_ARGS(type, ...) sizeof((type[]){__VA_ARGS__}) / sizeof(type)
+
 /// Helper macro to initialize `StringIndexT` object.
 /// When only one argument is passed, it is used as `stop` and `start` is set to 0.
 /// When two arguments are passed, they are used as `start` and `stop` respectively.
@@ -95,7 +100,8 @@ StringIterator_append(StringIteratorT *self, const StringT *string) {
 /// StringIndexT index_with_start_stop = StringIndex(0, 10);
 /// StringIndexT index_with_start_stop_step = StringIndex(0, 10, 2);
 /// ```
-#define StringIndex(...) StringIndex__init__(_VA_NARGS(__VA_ARGS__), __VA_ARGS__)
+#define StringIndex(...)                                                                 \
+    StringIndex__init__(__NUM_ARGS(ssize_t, __VA_ARGS__), __VA_ARGS__)
 
 StringIndexT
 StringIndex__init__(size_t nargs, ...) {
@@ -353,11 +359,11 @@ String_equals(const StringT *self, const StringT *other) {
 /// ```c
 /// StringT *string = String_from("Hello, World!");
 /// StringT *sub_string = String_from("World");
-/// String_contains(string, sub_string); // (StringIndexT){7, 12, 1}
+/// String_contains(string, sub_string); // StringIndex(7, 12)
 /// ```
 StringIndexT
 String_contains(const StringT *self, const StringT *other) {
-    return String_contains_in_range(self, other, (StringIndexT){0, self->length, 1});
+    return String_contains_in_range(self, other, StringIndex(self->length));
 }
 
 /// Check if `other` string is contained within the specified range in the original string
@@ -365,16 +371,21 @@ String_contains(const StringT *self, const StringT *other) {
 /// the sub_string, when the length of `index` is smaller than the length of the `other`
 /// string.
 ///
+/// Checks for equality manually insteading of making a slice and using `String_equals` to
+/// consume less memory and time.
+///
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hello, World!");
 /// StringT *sub_string = String_from("World");
-/// String_contains_in_range(string, sub_string, (StringIndexT){0, 5, 1});  // false
-/// String_contains_in_range(string, sub_string, (StringIndexT){0, 12, 1}); // true
+/// String_contains_in_range(string, sub_string,
+///                          StringIndex(0, 5)); // StringIndex(0, 0, 1)
+/// String_contains_in_range(string, sub_string,
+///                          StringIndex(0, 12)); // StringIndex(7, 12)
 /// ```
 StringIndexT
 String_contains_in_range(const StringT *self, const StringT *other, StringIndexT index) {
-    StringIndexT not_found = (StringIndexT){0, 0, 1};
+    StringIndexT not_found = StringIndex_new(0, 0, 1);
     StringIndexT slice_index;
     ssize_t offset = other->length - 1;
 
@@ -386,7 +397,7 @@ String_contains_in_range(const StringT *self, const StringT *other, StringIndexT
     if (index.stop - index.start < other->length) return not_found;
 
     for (ssize_t i = index.start; i < index.stop; ++i) {
-        if (self->string[i] == other->string[0]) {
+        if (self->string[i] == other->string[0] && i + offset < index.stop) {
             ssize_t j;
             for (j = 1; j < other->length; ++j)
                 if (self->string[i + j] != other->string[j]) break;
