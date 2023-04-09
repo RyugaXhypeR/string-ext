@@ -48,6 +48,13 @@ StringIteratorT *String_split_lines(const StringT *self);
 StringIteratorT *String_split_whitespace(const StringT *self);
 StringIteratorT *String_split_limit(const StringT *self, const StringT *delimiter,
                                     ssize_t limit);
+StringIteratorT *String_split_lines_limit(const StringT *self, ssize_t limit);
+StringIteratorT *String_split_whitespace_limit(const StringT *self, ssize_t limit);
+StringIteratorT *String_split_in_range(const StringT *self, const StringT *delimiter,
+                                       StringIndexT index);
+StringIteratorT *String_right_split(const StringT *self, const StringT *delimiter);
+StringIteratorT *String_right_split_limit(const StringT *self, const StringT *delimiter,
+                                          ssize_t limit);
 StringT *String_copy(const StringT *self);
 StringT *String_join(StringIteratorT *self, const StringT *delimiter);
 StringT *String_slice(const StringT *self, StringIndexT index);
