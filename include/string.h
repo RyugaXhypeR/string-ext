@@ -43,6 +43,9 @@ ssize_t String_count(const StringT *self, const StringT *sub_string);
 StringIndexT String_contains(const StringT *self, const StringT *sub_string);
 StringIndexT String_contains_in_range(const StringT *self, const StringT *other,
                                       StringIndexT index);
+StringIndexT String_contains_char(const StringT *self, const char character);
+StringIndexT String_contains_char_in_range(const StringT *self, const char character,
+                                           StringIndexT index);
 StringIteratorT *String_split(const StringT *self, const StringT *delimiter);
 StringIteratorT *String_split_lines(const StringT *self);
 StringIteratorT *String_split_whitespace(const StringT *self);
