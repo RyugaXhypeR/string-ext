@@ -8,7 +8,8 @@ CF_ALL = $(CF_SRC) $(CF_TARGET)
 
 CC = gcc
 OPT = -O3
-C_FLAGS = -Wall -Wextra -g $(OPT) -fPIE -DDEBUG
+D = NDEBUG 
+C_FLAGS = -Wall -Wextra -g $(OPT) -fPIE -D$(D) -Iinclude
 
 OF_TARGET = $(CF_TARGET:%.c=$(D_MK)/%.o)
 OF_SRC = $(CF_SRC:%.c=$(D_MK)/%.o)
@@ -21,8 +22,6 @@ all: $(EF_BIN)
 
 $(EF_BIN): $(OF_ALL)
 	$(CC) -o $@ $^
-
--include $(DF_ALL)
 
 $(D_MK)/%.o: %.c
 	@mkdir -p $(@D)
