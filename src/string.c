@@ -444,6 +444,56 @@ String_contains_char_in_range(const StringT *self, const char character,
         if (self->string[i] == character) return StringIndex(i, i + 1);
     return StringIndex(0, 0, 1);
 }
+
+/// Check if the string contains any char from the char class.
+/// Similar to regex: `[...]`
+/// Time complexity is O(n*m) where n is the length of the string and m is the length of
+/// the char class.
+///
+/// # Example
+/// ```c
+/// StringT *string = String_from("Hello, World!");
+/// StringT *char_class = String_from("Wd");
+/// String_contains_char_class(string, char_class); // StringIndex(7, 8)
+/// ```
+StringIndexT
+String_find_from_char_class(const StringT *self, const StringT *characters) {
+    return String_find_from_char_class_in_range(self, characters,
+                                                StringIndex(self->length));
+}
+
+/// Check if the string contains any char from the char class in the specified range.
+/// Similar to regex: `[...]`
+/// Time complexity is O(n*m) where n is the length of the string and m is the length of
+/// the char class.
+///
+/// # Example
+/// ```c
+/// StringT *string = String_from("Hello, World!");
+/// StringT *char_class = String_from("Wd");
+/// String_contains_char_class_in_range(string, char_class,
+///                                     StringIndex(0, 5)); // StringIndex(0, 0, 1)
+/// String_contains_char_class_in_range(string, char_class,
+///                                     StringIndex(8, 12)); // StringIndex(11, 12)
+/// ```
+StringIndexT
+String_find_from_char_class_in_range(const StringT *self, const StringT *characters,
+                                     StringIndexT index) {
+    StringIndexT not_found = StringIndex(0, 0, 1);
+    StringIndexT slice_index;
+    ssize_t index_length = StringIndex_len(index);
+
+    printf("index: %ld %ld %ld\n", index.start, index.stop, index.step);
+
+    for (ssize_t i = index.start; i < index.stop && index_length--; ++i) {
+        slice_index = String_contains_char(characters, self->string[i]);
+        printf("%ld %ld %ld\n", slice_index.start, slice_index.stop, slice_index.step);
+        if (!StringIndex_len(slice_index)) continue;
+        return slice_index;
+    }
+    return not_found;
+}
+
 /// Replace all occurrences of a sub_string with a replacement string recursively.
 ///
 /// # Example
