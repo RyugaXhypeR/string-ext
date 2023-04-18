@@ -640,14 +640,11 @@ String_split_whitespace_limit(const StringT *self, ssize_t limit) {
         exit(EXIT_FAILURE);
     }
 
-    for (ssize_t i = 0; i < self->length; ++i) {
+    for (ssize_t i = 0; i < self->length && limit--; ++i) {
         if (CHAR_IS_WHITESPACE(self->string[i])) {
-            if (start != i) {
-                StringIterator_append(iterator,
-                                      String_slice(self, StringIndex(start, i)));
-                if (!--limit) break;
-            }
-            start = i + 1;
+            StringIterator_append(iterator, String_slice(self, StringIndex(start, i)));
+            while (CHAR_IS_WHITESPACE(self->string[i]) && i < self->length) ++i;
+            start = i;
         }
     }
 
