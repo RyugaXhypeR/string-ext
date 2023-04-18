@@ -389,10 +389,10 @@ String_contains(const StringT *self, const StringT *other) {
 /// String_contains_in_range(string, sub_string,
 ///                          StringIndex(0, 12)); // StringIndex(7, 12)
 /// ```
+
 StringIndexT
 String_contains_in_range(const StringT *self, const StringT *other, StringIndexT index) {
     StringIndexT not_found = StringIndex(0, 0, 1);
-    StringIndexT slice_index;
     ssize_t offset = other->length - 1;
 
     if (index.step != 1) {
@@ -522,7 +522,7 @@ String_replace(const StringT *self, const StringT *sub_string,
 /// StringIterator_next(iterator); // "Mango, Orange"
 /// ```
 StringIteratorT *
-String_split_with_limit(const StringT *self, const StringT *delimiter, ssize_t limit) {
+String_split_limit(const StringT *self, const StringT *delimiter, ssize_t limit) {
     StringIteratorT *iterator = StringIterator_new();
     StringIndexT index;
     StringIndexT slice_index;
@@ -570,7 +570,7 @@ String_split_with_limit(const StringT *self, const StringT *delimiter, ssize_t l
 /// ```
 StringIteratorT *
 String_split(const StringT *self, const StringT *delimiter) {
-    return String_split_with_limit(self, delimiter, -1);
+    return String_split_limit(self, delimiter, -1);
 }
 
 /// Split the string based on newline chars.
@@ -605,10 +605,19 @@ String_split_lines(const StringT *self) {
 /// StringT *word;
 ///
 /// while (word = StringIterator_next(string_iterator))
-///     word->string; // "Apple", "Banana", "Mango", "Cauliflower", "Broccoli", "Cabbage"
+///     word->string; // "Apple", "Banana", "Mango", "Cauliflower", "Broccoli",
+///     "Cabbage"
 /// ```
 StringIteratorT *
 String_split_whitespace(const StringT *self) {
+    return String_split_whitespace_limit(self, -1);
+}
+
+StringIteratorT *
+String_split_lines_limit(const StringT *self, ssize_t limit) {
+    return String_split_limit(self, String_from("\n"), limit);
+}
+
 StringIteratorT *
 String_split_whitespace_limit(const StringT *self, ssize_t limit) {
     StringIteratorT *iterator = StringIterator_new();
@@ -643,6 +652,10 @@ String_split_whitespace_limit(const StringT *self, ssize_t limit) {
     return iterator;
 }
 
+StringIteratorT *
+String_split_in_range(const StringT *self, const StringT *delimiter, StringIndexT index) {
+    return String_split(String_slice(self, index), delimiter);
+}
 
 StringIteratorT *
 String_right_split(const StringT *self, const StringT *delimiter) {
