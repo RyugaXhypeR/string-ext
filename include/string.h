@@ -46,6 +46,10 @@ StringIndexT String_contains_in_range(const StringT *self, const StringT *other,
 StringIndexT String_contains_char(const StringT *self, const char character);
 StringIndexT String_contains_char_in_range(const StringT *self, const char character,
                                            StringIndexT index);
+StringIndexT String_find_from_char_class(const StringT *self, const StringT *characters);
+StringIndexT String_find_from_char_class_in_range(const StringT *self,
+                                                  const StringT *characters,
+                                                  StringIndexT index);
 StringIteratorT *String_split(const StringT *self, const StringT *delimiter);
 StringIteratorT *String_split_lines(const StringT *self);
 StringIteratorT *String_split_whitespace(const StringT *self);
