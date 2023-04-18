@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #define WHITESPACE_CHARS " \t\n\r"
 #define CHAR_IS_WHITESPACE(ch)                                                           \
     ((ch) == ' ' || (ch) == '\t' || (ch) == '\n' || (ch) == '\r')
@@ -624,8 +625,6 @@ String_split_lines_limit(const StringT *self, ssize_t limit) {
 StringIteratorT *
 String_split_whitespace_limit(const StringT *self, ssize_t limit) {
     StringIteratorT *iterator = StringIterator_new();
-    StringIndexT index;
-    StringIndexT slice_index;
     ssize_t start = 0;
 
     // Special case for `limit`
@@ -666,7 +665,6 @@ StringIteratorT *
 String_right_split_limit(const StringT *self, const StringT *delimiter, ssize_t limit) {
     StringIteratorT *iterator = StringIterator_new();
     StringIndexT index;
-    StringIndexT slice_index;
     ssize_t start = self->length;
 
     // Special case for `limit`
