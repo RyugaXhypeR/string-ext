@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define WHITESPACE_CHARS " \t\n\r"
 #define CHAR_IS_WHITESPACE(ch)                                                           \
     ((ch) == ' ' || (ch) == '\t' || (ch) == '\n' || (ch) == '\r')
 #define CHAR_IS_DIGIT(ch) ((ch) >= '0' && (ch) <= '9')
@@ -143,6 +144,11 @@ StringIndex_new(ssize_t start, ssize_t stop, ssize_t step) {
         exit(EXIT_FAILURE);
     }
     return (StringIndexT){.start = start, .stop = stop, .step = step};
+}
+
+ssize_t
+StringIndex_len(StringIndexT self) {
+    return (self.stop - self.start) / self.step;
 }
 
 /* ------------------------------ StringT ------------------------------ */
