@@ -609,16 +609,78 @@ String_split_lines(const StringT *self) {
 /// ```
 StringIteratorT *
 String_split_whitespace(const StringT *self) {
+StringIteratorT *
+String_split_whitespace_limit(const StringT *self, ssize_t limit) {
     StringIteratorT *iterator = StringIterator_new();
-    StringT *string = String_new(0);
+    StringIndexT index;
+    StringIndexT slice_index;
+    ssize_t start = 0;
 
-        if (CHAR_IS_WHITESPACE(self->string[i])) {
-            if (string->length) StringIterator_append(iterator, string);
-            string = String_new(0);
-        } else
-            String_push(string, self->string[i]);
+    // Special case for `limit`
+    // If limit is -1, then we iterate until the string is exhausted
+    if (!limit) {
+        StringIterator_append(iterator, self);
+        return iterator;
+    } else if (limit == -1) {
+        limit = self->length;
+    } else if (limit < -1) {
+        fprintf(stderr, "String_split_limit: limit must be greater than -1");
+        exit(EXIT_FAILURE);
     }
-    if (string->length) StringIterator_append(iterator, string);
+
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (CHAR_IS_WHITESPACE(self->string[i])) {
+            if (start != i) {
+                StringIterator_append(iterator,
+                                      String_slice(self, StringIndex(start, i)));
+                if (!--limit) break;
+            }
+            start = i + 1;
+        }
+    }
+
+
+    return iterator;
+}
+
+
+StringIteratorT *
+String_right_split(const StringT *self, const StringT *delimiter) {
+    return String_right_split_limit(self, delimiter, -1);
+}
+
+StringIteratorT *
+String_right_split_limit(const StringT *self, const StringT *delimiter, ssize_t limit) {
+    StringIteratorT *iterator = StringIterator_new();
+    StringIndexT index;
+    StringIndexT slice_index;
+    ssize_t start = self->length;
+
+    // Special case for `limit`
+    // If limit is -1, then we iterate until the string is exhausted
+    if (!limit) {
+        StringIterator_append(iterator, self);
+        return iterator;
+    } else if (limit == -1) {
+        limit = self->length;
+    } else if (limit < -1) {
+        fprintf(stderr, "String_split_limit: limit must be greater than -1");
+        exit(EXIT_FAILURE);
+    }
+
+    index = String_contains(self, delimiter);
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (index.stop) {
+            if (start != index.start) {
+                StringIterator_append(
+                    iterator, String_slice(self, StringIndex(index.start, start)));
+                if (!--limit) break;
+            }
+            start = index.start - 1;
+        }
+        index =
+            String_contains_in_range(self, delimiter, StringIndex(0, index.start - 1));
+    }
 
     return iterator;
 }
