@@ -415,6 +415,35 @@ String_contains_in_range(const StringT *self, const StringT *other, StringIndexT
     return not_found;
 }
 
+/// Check if the string contains the given char.
+/// Time complexity is O(n) where n is the length of the string.
+///
+/// # Example
+/// ```c
+/// StringT *string = String_from("Hello, World!");
+/// String_contains_char(string, 'W'); // StringIndex(7, 8)
+/// ```
+StringIndexT
+String_contains_char(const StringT *self, const char character) {
+    return String_contains_char_in_range(self, character, StringIndex(self->length));
+}
+
+/// Check if the string contains the given char in the specified range.
+/// Time complexity is O(n) where n is the length of the string.
+///
+/// # Example
+/// ```c
+/// StringT *string = String_from("Hello, World!");
+/// String_contains_char_in_range(string, 'W', StringIndex(0, 5)); // StringIndex(0, 0, 1)
+/// String_contains_char_in_range(string, 'W', StringIndex(0, 12)); // StringIndex(7, 8)
+/// ```
+StringIndexT
+String_contains_char_in_range(const StringT *self, const char character,
+                              StringIndexT index) {
+    for (ssize_t i = index.start; i < index.stop; i += index.step)
+        if (self->string[i] == character) return StringIndex(i, i + 1);
+    return StringIndex(0, 0, 1);
+}
 /// Replace all occurrences of a sub_string with a replacement string recursively.
 ///
 /// # Example
