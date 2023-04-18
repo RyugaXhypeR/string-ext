@@ -317,7 +317,7 @@ void
 String_concatenate_inplace(StringT *self, const StringT *other) {
     String_re_allocate(self, self->length + other->length);
 
-    for (ssize_t i = 0; i < other->length; i++)
+    for (ssize_t i = 0; i < other->length; ++i)
         self->string[self->length++] = other->string[i];
 }
 
@@ -333,7 +333,7 @@ String_repeat(const StringT *self, ssize_t times) {
     ssize_t new_length = self->length * times;
     StringT *new_string = String_from_char_array_with_length(self->string, new_length);
 
-    for (ssize_t i = 1; i < times; i++) String_concatenate_inplace(new_string, self);
+    for (ssize_t i = 1; i < times; ++i) String_concatenate_inplace(new_string, self);
 
     return new_string;
 }
@@ -351,7 +351,7 @@ bool
 String_equals(const StringT *self, const StringT *other) {
     if (self->length != other->length) return false;
 
-    for (ssize_t i = 0; i < self->length; i++)
+    for (ssize_t i = 0; i < self->length; ++i)
         if (self->string[i] != other->string[i]) return false;
 
     return true;
@@ -533,7 +533,6 @@ String_split_whitespace(const StringT *self) {
     StringIteratorT *iterator = StringIterator_new();
     StringT *string = String_new(0);
 
-    for (int i = 0; i < self->length; ++i) {
         if (CHAR_IS_WHITESPACE(self->string[i])) {
             if (string->length) StringIterator_append(iterator, string);
             string = String_new(0);
