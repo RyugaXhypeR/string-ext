@@ -1,5 +1,7 @@
 #include "../include/string.h"
 
+#include "../include/dbg.h"
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -162,6 +164,7 @@ String_re_allocate(StringT *self, ssize_t new_size) {
 
     new_allocated = (new_size + (new_size >> 3) + 6) & ~3;
 
+    DBG("Re-allocating string from %ld to %ld", self->allocated, new_allocated);
     self->string = realloc(self->string, new_allocated * sizeof *self->string);
     self->allocated = new_allocated;
 }
