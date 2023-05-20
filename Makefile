@@ -1,11 +1,11 @@
-D_MK = .build
+
 
 EF_BIN = $(D_MK)/bin
 CF_SRC = $(wildcard src/*.c)
 CF_TARGET = $(wildcard *.c)
 CF_TEST = $(wildcard tests/*.c)
 
-CC = gcc
+CC = clang
 OPT = -O1
 D = NDEBUG 
 C_FLAGS = -Wall -Wextra -g $(OPT) -fPIE -D$(D) -Iinclude/
@@ -31,17 +31,17 @@ $(D_MK)/%.o: %.c
 	@mkdir -p $(@D)
 	$(CC) -c $(C_FLAGS) -MMD -o $@ $<
 
-$(EF_TEST): $(CF_TEST)
-
-$(D_MK)/%.out: %.c
-	@mkdir -p $(@D)
-	$(CC) $(C_FLAGS) -o $@ $< $(CF_SRC)
-
 run: $(EF_BIN)
 	@$< 
 
 test: $(OF_SRC) $(EF_TEST)
-	@for test in $(EF_TEST); do ./$$test; done
+	@for test in $(EF_TEST); do \
+		./$$test; \
+	done
+
+$(EF_TEST): $(AF_SRC)
+	@mkdir -p $(@D)
+	$(CC) $(C_FLAGS) -o $@ $(@:$(D_MK)/%.out=%.c) $^
 
 clean:
 	rm -rf $(D_MK)
