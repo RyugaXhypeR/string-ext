@@ -11,7 +11,7 @@ test_string_new() {
     ssize_t size = 10;
     StringT *string = String_new(size);
 
-    log_result(__func__, string->length == size);
+    log_result(__func__, string->allocated == size);
     String_free(string);
 }
 
