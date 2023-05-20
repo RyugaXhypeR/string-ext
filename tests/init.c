@@ -6,11 +6,6 @@
 #include <string.h>
 
 void
-compare_string(StringT *string, const char *str) {
-    for (ssize_t i = 0; i < string->length; i++) assert(string->string[i] == str[i]);
-}
-
-void
 test_string_new() {
     ssize_t size = 10;
     StringT *string = String_new(size);
