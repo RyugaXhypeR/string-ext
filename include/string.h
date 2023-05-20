@@ -114,7 +114,7 @@ void StringIterator_free(StringIteratorT *self);
 /// ```
 #define StringIndex(...)                                                                 \
     StringIndex__init__(__NUM_ARGS(ssize_t, __VA_ARGS__), __VA_ARGS__)
-StringIndexT StringIndex__init__(ssize_t num_args, ...);
+StringIndexT StringIndex__init__(size_t nargs, ...);
 StringIndexT StringIndex_new(ssize_t start, ssize_t stop, ssize_t step);
 
 #endif /* STRING_H */
