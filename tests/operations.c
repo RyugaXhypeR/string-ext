@@ -103,6 +103,15 @@ test_is_whitespace() {
 }
 
 static void
+test_count() {
+    StringT *str = String_from("Hello, World");
+    StringT *str2 = String_from("l");
+    StringT *str3 = String_from("lo");
+
+    log_result(__func__, String_count(str, str2) == 3 && String_count(str, str3) == 1);
+}
+
+static void
 test_contains() {
     StringT *str = String_from("Hello, World");
     StringT *str2 = String_from("l");
@@ -137,6 +146,7 @@ main() {
     test_is_numeric();
     test_is_decimal();
     test_is_whitespace();
+    test_count();
     test_contains();
     test_contains_in_range();
 }
