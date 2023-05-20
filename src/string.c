@@ -1112,3 +1112,27 @@ Stirng_chunks(const StringT *self, ssize_t chunk_size) {
 
     return iterator;
 }
+
+/// Count the number of times the substring occurs in the string.
+/// Has time complexity of O(n)
+///
+/// # Example
+/// ```c
+/// StringT *string = String_from("Hello, World");
+/// String_count(string, String_from("l")) // 3
+/// String_count(string, String_from("ll")) // 1
+/// ```
+ssize_t 
+String_count(const StringT *self, const StringT *sub_string) {
+    ssize_t count = 0;
+    StringIndexT contains = String_contains(self, sub_string);
+
+    if (!contains.stop) return 0;
+
+    while (contains.stop) {
+        contains = String_contains_in_range(self, sub_string, StringIndex(contains.stop + 1, self->length));
+        count++;
+    }
+
+    return count;
+}
