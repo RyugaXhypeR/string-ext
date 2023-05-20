@@ -128,8 +128,8 @@ test_contains_in_range() {
     StringT *str3 = String_from("lo");
 
     log_result(__func__,
-               String_contains_in_range(str, str2, StringIndex(0, 5, 1)).stop &&
-                   !String_contains_in_range(str, str3, StringIndex(0, 5, 1)).stop);
+               String_contains_in_range(str, str2, StringIndex(0, 4, 1)).stop &&
+                   !String_contains_in_range(str, str3, StringIndex(0, 4, 1)).stop);
 }
 
 int
