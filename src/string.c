@@ -13,9 +13,8 @@
 #define CHAR_IS_DIGIT(ch) ((ch) >= '0' && (ch) <= '9')
 #define CHAR_IS_ALPHABET(ch)                                                             \
     (((ch) >= 'a' && (ch) <= 'z') || ((ch) >= 'A' && (ch) <= 'Z'))
-#define CHAR_IS_LOWERCASE(ch) ((ch) >= 'a' && (ch) <= 'z')
-#define CHAR_IS_UPPERCASE(ch) ((ch) >= 'A' && (ch) <= 'Z')
-#define CHAR_IS_ALPHA_NUMERIC(ch) (CHAR_IS_ALPHABET(ch) || CHAR_IS_DIGIT(ch))
+#define CHAR_IS_LOWERCASE(ch) (CHAR_IS_ALPHABET(ch) ? (ch) >= 'a' && (ch) <= 'z': true)
+#define CHAR_IS_UPPERCASE(ch) (CHAR_IS_ALPHABET(ch) ? (ch) >= 'A' && (ch) <= 'Z': true)
 
 #define CHAR_TO_LOWERCASE(ch)                                                            \
     if (CHAR_IS_ALPHABET(ch)) ch |= 0x20
@@ -87,26 +86,6 @@ StringIterator_append(StringIteratorT *self, const StringT *string) {
 }
 
 /* ------------------------------ StringIndexT ------------------------------ */
-
-
-// Helper macro to get number of arguments passed to a macro.
-#define __NUM_ARGS(type, ...) sizeof((type[]){__VA_ARGS__}) / sizeof(type)
-
-/// Helper macro to initialize `StringIndexT` object.
-/// When only one argument is passed, it is used as `stop` and `start` is set to 0.
-/// When two arguments are passed, they are used as `start` and `stop` respectively.
-/// When three arguments are passed, they are used as `start`, `stop` and `step`
-/// respectively.
-///
-/// # Example
-/// ```c
-/// StringIndexT index_with_stop = StringIndex(10);
-/// StringIndexT index_with_start_stop = StringIndex(0, 10);
-/// StringIndexT index_with_start_stop_step = StringIndex(0, 10, 2);
-/// ```
-#define StringIndex(...)                                                                 \
-    StringIndex__init__(__NUM_ARGS(ssize_t, __VA_ARGS__), __VA_ARGS__)
-
 StringIndexT
 StringIndex__init__(size_t nargs, ...) {
     va_list args;
@@ -895,10 +874,20 @@ String_swap_case(const StringT *self) {
 /// ```
 bool
 String_is_alphanumeric(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_ALPHA_NUMERIC(self->string[i])) return false;
+    int alpha_present = 0;
+    int num_present = 0;
+    char c;
 
-    return true;
+    for (ssize_t i = 0; i < self->length; ++i) {
+        c = self->string[i];
+
+        if (CHAR_IS_ALPHABET(c)) alpha_present = 1;
+        else if (CHAR_IS_DIGIT(c)) num_present = 1;
+        else return false;
+
+    }
+
+    return alpha_present && num_present;
 }
 
 /// Check if the string is alphabetic.

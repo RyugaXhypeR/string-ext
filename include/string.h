@@ -97,6 +97,24 @@ void StringIterator_append(StringIteratorT *self, const StringT *string);
 void StringIterator_free(StringIteratorT *self);
 
 /* StringIndexT */
+// Helper macro to get number of arguments passed to a macro.
+#define __NUM_ARGS(type, ...) sizeof((type[]){__VA_ARGS__}) / sizeof(type)
+
+/// Helper macro to initialize `StringIndexT` object.
+/// When only one argument is passed, it is used as `stop` and `start` is set to 0.
+/// When two arguments are passed, they are used as `start` and `stop` respectively.
+/// When three arguments are passed, they are used as `start`, `stop` and `step`
+/// respectively.
+///
+/// # Example
+/// ```c
+/// StringIndexT index_with_stop = StringIndex(10);
+/// StringIndexT index_with_start_stop = StringIndex(0, 10);
+/// StringIndexT index_with_start_stop_step = StringIndex(0, 10, 2);
+/// ```
+#define StringIndex(...)                                                                 \
+    StringIndex__init__(__NUM_ARGS(ssize_t, __VA_ARGS__), __VA_ARGS__)
+StringIndexT StringIndex__init__(size_t nargs, ...);
 StringIndexT StringIndex_new(ssize_t start, ssize_t stop, ssize_t step);
 
 #endif /* STRING_H */
