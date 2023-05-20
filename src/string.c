@@ -874,10 +874,20 @@ String_swap_case(const StringT *self) {
 /// ```
 bool
 String_is_alphanumeric(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_ALPHA_NUMERIC(self->string[i])) return false;
+    int alpha_present = 0;
+    int num_present = 0;
+    char c;
 
-    return true;
+    for (ssize_t i = 0; i < self->length; ++i) {
+        c = self->string[i];
+
+        if (CHAR_IS_ALPHABET(c)) alpha_present = 1;
+        else if (CHAR_IS_DIGIT(c)) num_present = 1;
+        else return false;
+
+    }
+
+    return alpha_present && num_present;
 }
 
 /// Check if the string is alphabetic.
