@@ -1,4 +1,4 @@
-
+D_MK = .build
 
 EF_BIN = $(D_MK)/bin
 CF_SRC = $(wildcard src/*.c)
