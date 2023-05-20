@@ -102,15 +102,6 @@ test_is_whitespace() {
     log_result(__func__, String_is_whitespace(str) && !String_is_whitespace(str2));
 }
 
-// static void
-// test_count() {
-//     StringT *str = String_from("Hello, World");
-//     StringT *str2 = String_from("l");
-//     StringT *str3 = String_from("lo");
-//
-//     log_result("count", String_count(str, str2) == 3 && String_count(str, str3) == 1);
-// }
-
 static void
 test_contains() {
     StringT *str = String_from("Hello, World");
