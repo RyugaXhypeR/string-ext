@@ -13,15 +13,15 @@
 #define CHAR_IS_DIGIT(ch) ((ch) >= '0' && (ch) <= '9')
 #define CHAR_IS_ALPHABET(ch)                                                             \
     (((ch) >= 'a' && (ch) <= 'z') || ((ch) >= 'A' && (ch) <= 'Z'))
-#define CHAR_IS_LOWERCASE(ch) (CHAR_IS_ALPHABET(ch) ? (ch) >= 'a' && (ch) <= 'z': true)
-#define CHAR_IS_UPPERCASE(ch) (CHAR_IS_ALPHABET(ch) ? (ch) >= 'A' && (ch) <= 'Z': true)
+#define CHAR_IS_LOWERCASE(ch) (CHAR_IS_ALPHABET(ch) ? (ch) >= 'a' && (ch) <= 'z' : true)
+#define CHAR_IS_UPPERCASE(ch) (CHAR_IS_ALPHABET(ch) ? (ch) >= 'A' && (ch) <= 'Z' : true)
 
 #define CHAR_TO_LOWERCASE(ch)                                                            \
-    if (CHAR_IS_ALPHABET(ch)) ch |= 0x20
+    if (CHAR_IS_ALPHABET(ch)) (ch |= 0x20)
 #define CHAR_TO_UPPERCASE(ch)                                                            \
-    if (CHAR_IS_ALPHABET(ch)) ch &= ~0x20
+    if (CHAR_IS_ALPHABET(ch)) (ch &= ~0x20)
 #define CHAR_SWAP_CASE(ch)                                                               \
-    if (CHAR_IS_ALPHABET(ch)) ch ^= 0x20
+    if (CHAR_IS_ALPHABET(ch)) (ch ^= 0x20)
 
 /// Convert negative index to C-valid index.
 /// If index is out of range, raise an exception.
@@ -881,10 +881,12 @@ String_is_alphanumeric(const StringT *self) {
     for (ssize_t i = 0; i < self->length; ++i) {
         c = self->string[i];
 
-        if (CHAR_IS_ALPHABET(c)) alpha_present = 1;
-        else if (CHAR_IS_DIGIT(c)) num_present = 1;
-        else return false;
-
+        if (CHAR_IS_ALPHABET(c))
+            alpha_present = 1;
+        else if (CHAR_IS_DIGIT(c))
+            num_present = 1;
+        else
+            return false;
     }
 
     return alpha_present && num_present;
@@ -1122,7 +1124,7 @@ Stirng_chunks(const StringT *self, ssize_t chunk_size) {
 /// String_count(string, String_from("l")) // 3
 /// String_count(string, String_from("ll")) // 1
 /// ```
-ssize_t 
+ssize_t
 String_count(const StringT *self, const StringT *sub_string) {
     ssize_t count = 0;
     StringIndexT contains = String_contains(self, sub_string);
@@ -1130,7 +1132,8 @@ String_count(const StringT *self, const StringT *sub_string) {
     if (!contains.stop) return 0;
 
     while (contains.stop) {
-        contains = String_contains_in_range(self, sub_string, StringIndex(contains.stop + 1, self->length));
+        contains = String_contains_in_range(self, sub_string,
+                                            StringIndex(contains.stop + 1, self->length));
         count++;
     }
 
