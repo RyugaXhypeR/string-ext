@@ -132,6 +132,51 @@ test_contains_in_range() {
                    !String_contains_in_range(str, str3, StringIndex(0, 4, 1)).stop);
 }
 
+static void
+test_reverse() {
+    StringT *str = String_from("Hello, World!");
+    StringT *reversed = String_reverse(str);
+    StringT *reversed_expected = String_from("!dlroW ,olleH");
+
+    log_result(__func__, string_t_equals(reversed, reversed_expected));
+}
+
+static void
+test_join() {
+    StringIteratorT *iter = StringIterator_new();
+    StringIterator_append(iter, String_from("Foo"));
+    StringIterator_append(iter, String_from("Bar"));
+    StringIterator_append(iter, String_from("Spam"));
+    StringIterator_append(iter, String_from("Egg"));
+
+    StringT *joined = String_join(iter, String_from("-"));
+    StringT *joined_expected = String_from("Foo-Bar-Spam-Egg");
+
+    log_result(__func__, string_t_equals(joined, joined_expected));
+}
+
+static void
+test_slice() {
+    StringT *str = String_from("foo bar");
+    StringIndexT idx = StringIndex(4);
+    StringT *slice = String_slice(str, idx);
+    StringT *slice_expected = String_from("foo");
+
+    log_result(__func__, string_t_equals(slice, slice_expected));
+}
+
+static void
+test_repeat() {
+    StringT *str = String_from("foo ");
+    StringT *rep_pos = String_repeat(str, 5);
+    StringT *rep_neg = String_repeat(str, -1);
+
+    StringT *rep_pos_expected = String_from("foo foo foo foo foo ");
+    StringT *rep_neg_expected = String_new(0);
+
+    log_result(__func__, string_t_equals(rep_pos, rep_pos_expected) && string_t_equals(rep_neg, rep_neg_expected));
+}
+
 int
 main() {
     test_copy();
@@ -149,4 +194,8 @@ main() {
     test_count();
     test_contains();
     test_contains_in_range();
+    test_reverse();
+    test_join();
+    test_slice();
+    test_repeat();
 }
