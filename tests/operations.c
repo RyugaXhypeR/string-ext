@@ -163,7 +163,7 @@ test_slice() {
     StringT *str = String_from("foo bar");
     StringIndexT idx = StringIndex(4);
     StringT *slice = String_slice(str, idx);
-    StringT *slice_expected = String_from("foo");
+    StringT *slice_expected = String_from("foo ");
 
     log_result(__func__, string_t_equals(slice, slice_expected));
 }
