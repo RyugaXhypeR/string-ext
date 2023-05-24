@@ -478,11 +478,8 @@ String_find_from_char_class_in_range(const StringT *self, const StringT *charact
     StringIndexT slice_index;
     ssize_t index_length = StringIndex_len(index);
 
-    printf("index: %ld %ld %ld\n", index.start, index.stop, index.step);
-
     for (ssize_t i = index.start; i < index.stop && index_length--; ++i) {
         slice_index = String_contains_char(characters, self->string[i]);
-        printf("%ld %ld %ld\n", slice_index.start, slice_index.stop, slice_index.step);
         if (!StringIndex_len(slice_index)) continue;
         return slice_index;
     }
