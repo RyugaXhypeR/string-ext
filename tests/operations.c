@@ -16,17 +16,20 @@ test_concatenate() {
     StringT *str = String_from("Hello, ");
     StringT *str2 = String_from("World");
     StringT *concat = String_concatenate(str, str2);
+    StringT *concat_expected = String_from("Hello, World");
 
-    log_result(__func__, string_t_equals(concat, String_from("Hello, World")));
+    log_result(__func__, string_t_equals(concat, concat_expected));
 }
 
 static void
 test_concatenate_inplace() {
     StringT *str = String_from("Hello, ");
     StringT *str2 = String_from("World");
+    StringT *concat_expected = String_from("Hello, World");
+
     String_concatenate_inplace(str, str2);
 
-    log_result(__func__, string_t_equals(str, String_from("Hello, World")));
+    log_result(__func__, string_t_equals(str, concat_expected));
 }
 
 static void
@@ -126,10 +129,10 @@ test_contains_in_range() {
     StringT *str = String_from("Hello, World");
     StringT *str2 = String_from("l");
     StringT *str3 = String_from("lo");
+    int contains_str2 = String_contains_in_range(str, str2, StringIndex(0, 4, 1)).stop;
+    int contains_str3 = !String_contains_in_range(str, str3, StringIndex(0, 4, 1)).stop;
 
-    log_result(__func__,
-               String_contains_in_range(str, str2, StringIndex(0, 4, 1)).stop &&
-                   !String_contains_in_range(str, str3, StringIndex(0, 4, 1)).stop);
+    log_result(__func__,contains_str2 && contains_str3);
 }
 
 static void
@@ -170,7 +173,6 @@ test_repeat() {
     StringT *str = String_from("foo ");
     StringT *rep_pos = String_repeat(str, 5);
     StringT *rep_neg = String_repeat(str, -1);
-
     StringT *rep_pos_expected = String_from("foo foo foo foo foo ");
     StringT *rep_neg_expected = String_new(0);
 
