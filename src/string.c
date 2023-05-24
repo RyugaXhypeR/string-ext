@@ -320,8 +320,13 @@ String_concatenate_inplace(StringT *self, const StringT *other) {
 /// ```
 StringT *
 String_repeat(const StringT *self, ssize_t times) {
-    ssize_t new_length = self->length * times;
-    StringT *new_string = String_from_char_array_with_length(self->string, new_length);
+    ssize_t new_length;
+    StringT *new_string;
+
+    if (times < 0) return String_new(0);
+
+    new_length = self->length * times;
+    new_string = String_pre_allocated(self->string, new_length);
 
     for (ssize_t i = 1; i < times; ++i) String_concatenate_inplace(new_string, self);
 
