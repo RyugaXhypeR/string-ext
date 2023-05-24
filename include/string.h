@@ -90,7 +90,7 @@ StringT *String_chunks(const StringT *self, ssize_t chunk_size);
 void String_free(StringT *self);
 
 /* StringIteratorT */
-StringIteratorT *StirngIterator_new();
+StringIteratorT *StringIterator_new();
 const StringT *StringIterator_next(StringIteratorT *self);
 const StringT *StringIterator_get(StringIteratorT *self);
 void StringIterator_append(StringIteratorT *self, const StringT *string);
