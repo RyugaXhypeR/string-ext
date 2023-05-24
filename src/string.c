@@ -149,6 +149,15 @@ String_re_allocate(StringT *self, ssize_t new_size) {
     self->allocated = new_allocated;
 }
 
+StringT *
+String_pre_allocated(char *str, ssize_t size) {
+    StringT *string = malloc(size * (sizeof *string));
+
+    *string = (StringT){.string = str, .length = c_string_length(str), .allocated = size};
+
+    return string;
+}
+
 static void
 String_push(StringT *self, char ch) {
     String_re_allocate(self, self->length + 1);
