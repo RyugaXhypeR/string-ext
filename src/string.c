@@ -262,7 +262,7 @@ String_slice(const StringT *self, StringIndexT index) {
     StringT *slice = String_new(0);
 
     // Calculate the length of this range and iterate that many times
-    int slice_length = (index.stop - index.start) / index.step;
+    int slice_length = StringIndex_len(index);
 
     while (slice_length--) {
         String_push(slice, self->string[index.start]);
