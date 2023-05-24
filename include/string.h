@@ -12,9 +12,9 @@ typedef struct {
 } StringT;
 
 typedef struct {
-    ssize_t start;
-    ssize_t stop;
-    ssize_t step;
+    int start;
+    int stop;
+    int step;
 } StringIndexT;
 
 typedef struct {
