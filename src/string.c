@@ -269,8 +269,6 @@ String_slice(const StringT *self, StringIndexT index) {
         index.start += index.step;
     }
 
-    String_push(slice, '\0');
-
     return slice;
 }
 
