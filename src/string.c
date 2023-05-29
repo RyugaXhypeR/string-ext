@@ -1080,8 +1080,7 @@ String_left_justify(const StringT *self, ssize_t width) {
     if (length_to_fill < 0) return String_copy(self);
 
     // Concatenate the string with `length_to_fill` number of whitespaces
-    return String_concatenate(String_copy(self),
-                              String_repeat(String_from(" "), length_to_fill));
+    return String_concatenate(self, String_repeat(String_from(" "), length_to_fill));
 }
 
 /// Justify the text towards the right within the given width.
