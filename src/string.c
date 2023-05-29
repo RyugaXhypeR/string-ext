@@ -840,11 +840,11 @@ String_to_title(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("hello, world");
-/// StringT *capitalized_string = String_to_capitalize(string);
+/// StringT *capitalized_string = String_to_capital(string);
 /// capitalized_string->string // Hello, world
 /// ```
 StringT *
-String_to_capitalize(const StringT *self) {
+String_to_capital(const StringT *self) {
     StringT *new_string = String_copy(self);
 
     if (!new_string->length) return new_string;
