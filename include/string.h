@@ -73,7 +73,7 @@ StringT *String_reverse(const StringT *self);
 StringT *String_to_upper(const StringT *self);
 StringT *String_to_lower(const StringT *self);
 StringT *String_to_title(const StringT *self);
-StringT *String_to_capitalize(const StringT *self);
+StringT *String_to_capital(const StringT *self);
 StringT *String_swap_case(const StringT *self);
 StringT *String_trim_whitespace(const StringT *self);
 StringT *String_trim_left(const StringT *self);
