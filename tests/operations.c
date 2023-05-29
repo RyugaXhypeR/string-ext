@@ -132,7 +132,7 @@ test_contains_in_range() {
     int contains_str2 = String_contains_in_range(str, str2, StringIndex(0, 4, 1)).stop;
     int contains_str3 = !String_contains_in_range(str, str3, StringIndex(0, 4, 1)).stop;
 
-    log_result(__func__,contains_str2 && contains_str3);
+    log_result(__func__, contains_str2 && contains_str3);
 }
 
 static void
@@ -176,7 +176,89 @@ test_repeat() {
     StringT *rep_pos_expected = String_from("foo foo foo foo foo ");
     StringT *rep_neg_expected = String_new(0);
 
-    log_result(__func__, string_t_equals(rep_pos, rep_pos_expected) && string_t_equals(rep_neg, rep_neg_expected));
+    log_result(__func__, string_t_equals(rep_pos, rep_pos_expected) &&
+                             string_t_equals(rep_neg, rep_neg_expected));
+}
+
+static void
+test_to_upper() {
+    StringT *str = String_from("Foo Bar");
+    StringT *upper = String_to_upper(str);
+    StringT *upper_expected = String_from("FOO BAR");
+
+    log_result(__func__, string_t_equals(upper, upper_expected));
+}
+
+static void
+test_to_lower() {
+    StringT *str = String_from("Foo Bar");
+    StringT *lower = String_to_lower(str);
+    StringT *lower_expected = String_from("foo bar");
+
+    log_result(__func__, string_t_equals(lower, lower_expected));
+}
+
+static void
+test_to_title() {
+    StringT *str = String_from("foo bar");
+    StringT *title = String_to_title(str);
+    StringT *title_expected = String_from("Foo Bar");
+
+    log_result(__func__, string_t_equals(title, title_expected));
+}
+
+static void
+test_to_capital() {
+    StringT *str = String_from("foo bar");
+    StringT *capital = String_to_capital(str);
+    StringT *capital_expected = String_from("Foo bar");
+
+    log_result(__func__, string_t_equals(capital, capital_expected));
+}
+
+static void
+test_swap_case() {
+    StringT *str = String_from("Foo Bar");
+    StringT *swap_case = String_swap_case(str);
+    StringT *swap_case_expected = String_from("fOO bAR");
+
+    log_result(__func__, string_t_equals(swap_case, swap_case_expected));
+}
+
+static void
+test_trim_whitespace() {
+    StringT *str = String_from(" Foo Bar  ");
+    StringT *trim = String_trim_whitespace(str);
+    StringT *trim_expected = String_from("Foo Bar");
+
+    log_result(__func__, string_t_equals(trim, trim_expected));
+}
+
+static void
+test_centre() {
+    StringT *str = String_from("Foo Bar");
+    StringT *centre = String_centre(str, 10);
+    StringT *centre_expected = String_from(" Foo Bar  ");
+
+    log_result(__func__, string_t_equals(centre, centre_expected));
+}
+
+static void
+test_left_justify() {
+    StringT *str = String_from("Foo Bar");
+    StringT *left_justify = String_left_justify(str, 10);
+    StringT *left_justify_expected = String_from("Foo Bar   ");
+
+    log_result(__func__, string_t_equals(left_justify, left_justify_expected));
+}
+
+static void
+test_right_justify() {
+    StringT *str = String_from("Foo Bar");
+    StringT *right_justify = String_right_justify(str, 10);
+    StringT *right_justify_expected = String_from("   Foo Bar");
+
+    log_result(__func__, string_t_equals(right_justify, right_justify_expected));
 }
 
 int
@@ -200,4 +282,13 @@ main() {
     test_join();
     test_slice();
     test_repeat();
+    test_to_upper();
+    test_to_lower();
+    test_to_title();
+    test_to_capital();
+    test_swap_case();
+    test_trim_whitespace();
+    test_centre();
+    test_left_justify();
+    test_right_justify();
 }
