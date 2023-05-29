@@ -85,7 +85,7 @@ StringT *String_centre(const StringT *self, ssize_t width);
 StringT *String_left_justify(const StringT *self, ssize_t width);
 StringT *String_right_justify(const StringT *self, ssize_t width);
 StringT *String_fill(const StringT *self, ssize_t width);
-StringT *String_chunks(const StringT *self, ssize_t chunk_size);
+StringIteratorT *String_chunks(const StringT *self, ssize_t chunk_size);
 
 void String_free(StringT *self);
 
