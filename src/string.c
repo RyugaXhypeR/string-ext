@@ -1043,9 +1043,9 @@ String_trim_left(const StringT *self) {
 /// ```
 StringT *
 String_trim_right(const StringT *self) {
-    for (ssize_t i = self->length - 1; i >= 0; ++i)
+    for (ssize_t i = self->length - 1; i >= 0; --i)
         if (!CHAR_IS_WHITESPACE(self->string[i]))
-            return String_slice(self, StringIndex(self->length - i));
+            return String_slice(self, StringIndex(i + 1));
     return String_copy(self);
 }
 
