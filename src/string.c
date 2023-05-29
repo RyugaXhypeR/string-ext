@@ -1049,6 +1049,14 @@ String_trim_right(const StringT *self) {
     return String_copy(self);
 }
 
+StringT *
+String_pad(const StringT *self, ssize_t left_pad, ssize_t right_pad) {
+    StringT *left_padded = String_concatenate(String_repeat(String_from(" "), left_pad), self);
+    StringT *right_padded = String_concatenate(left_padded, String_repeat(String_from(" "), right_pad));
+
+    return right_padded;
+}
+
 /// Centre the text within the given width.
 /// Padding is done with space chars
 ///
@@ -1059,10 +1067,14 @@ String_trim_right(const StringT *self) {
 /// ```
 StringT *
 String_centre(const StringT *self, ssize_t width) {
-    ssize_t left_shift_width = (self->length - width) / 2;
-    ssize_t right_shift_width = self->length - left_shift_width;
-    return String_right_justify(String_left_justify(self, left_shift_width),
-                                right_shift_width);
+    ssize_t margin, left_pad;
+
+    if (self->length >= width) return String_copy(self);
+
+    margin = width - self->length;
+    left_pad = margin / 2;
+
+    return String_pad(self, left_pad, margin - left_pad);
 }
 
 /// Justify the text towards the left within the given width.
