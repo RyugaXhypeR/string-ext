@@ -13,8 +13,8 @@
 #define CHAR_IS_DIGIT(ch) ((ch) >= '0' && (ch) <= '9')
 #define CHAR_IS_ALPHABET(ch)                                                             \
     (((ch) >= 'a' && (ch) <= 'z') || ((ch) >= 'A' && (ch) <= 'Z'))
-#define CHAR_IS_LOWERCASE(ch) (CHAR_IS_ALPHABET(ch) ? (ch) >= 'a' && (ch) <= 'z' : true)
-#define CHAR_IS_UPPERCASE(ch) (CHAR_IS_ALPHABET(ch) ? (ch) >= 'A' && (ch) <= 'Z' : true)
+#define CHAR_IS_LOWERCASE(ch) (((ch) >= 'a' && (ch) <= 'z') || !CHAR_IS_ALPHABET(ch))
+#define CHAR_IS_UPPERCASE(ch) (((ch) >= 'A' && (ch) <= 'Z') || !CHAR_IS_ALPHABET(ch))
 
 #define CHAR_TO_LOWERCASE(ch)                                                            \
     if (CHAR_IS_ALPHABET(ch)) (ch |= 0x20)
