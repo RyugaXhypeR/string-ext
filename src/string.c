@@ -1176,7 +1176,7 @@ String_count(const StringT *self, const StringT *sub_string) {
 
     while (contains.stop) {
         contains = String_contains_in_range(self, sub_string,
-                                            StringIndex(contains.stop + 1, self->length));
+                                            StringIndex(contains.stop, self->length));
         count++;
     }
 
