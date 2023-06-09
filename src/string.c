@@ -403,9 +403,11 @@ String_contains(const StringT *self, const StringT *other) {
 /// Time complexity is O(n*m) where n is the length of the string and m is the length of
 /// the sub_string, when the length of `index` is smaller than the length of the `other`
 /// string.
-///
-/// Checks for equality manually insteading of making a slice and using `String_equals` to
 /// consume less memory and time.
+///
+/// Implemented using Booyer-Moore algorithm.
+/// For more information checkout:
+/// https://en.wikipedia.org/wiki/Boyer–Moore_string-search_algorithm
 ///
 /// # Example
 /// ```c
@@ -416,28 +418,31 @@ String_contains(const StringT *self, const StringT *other) {
 /// String_contains_in_range(string, sub_string,
 ///                          StringIndex(0, 12)); // StringIndex(7, 12)
 /// ```
-
 StringIndexT
 String_contains_in_range(const StringT *self, const StringT *other, StringIndexT index) {
     StringIndexT not_found = StringIndex(0, 0, 1);
-    ssize_t offset = other->length - 1;
+    ssize_t match_table[U8_MAX];
+    ssize_t shift;
+
+    _construct_bad_match_table(other, match_table);
 
     if (index.step != 1) {
         fprintf(stderr, "String_contains_in_range: step must be 1");
         exit(EXIT_FAILURE);
     }
 
-    if (index.stop - index.start < other->length) return not_found;
+    for (ssize_t i = index.start + other->length - 1; i < index.stop;) {
+        shift = match_table[self->string[i]];
 
-    for (ssize_t i = index.start; i < index.stop; ++i) {
-        if (self->string[i] == other->string[0] && i + offset < index.stop) {
-            ssize_t j;
-            for (j = 1; j < other->length; ++j)
-                if (self->string[i + j] != other->string[j]) break;
+        if (!shift)
+            shift = other->length;
+        else if (_reverse_string_compare_from_starting_point(self, other, i))
+            return StringIndex(i - other->length + 1, i + 1);
 
-            if (j == other->length) return StringIndex(i, i + j - 1);
-        }
+        i += shift;
     }
+
+    if (index.stop - index.start < other->length) return not_found;
 
     return not_found;
 }
