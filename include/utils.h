@@ -30,4 +30,9 @@ log_result(const char *method_name, int result) {
         fprintf(stderr, "[ERR]: %s\n", method_name);
 }
 
+inline int
+string_index_equal(const StringIndexT idx1, const StringIndexT idx2) {
+    return idx1.start == idx2.start && idx1.stop == idx2.stop && idx1.step == idx2.step;
+}
+
 #endif  // UNIT_TEST_UTILS_H
