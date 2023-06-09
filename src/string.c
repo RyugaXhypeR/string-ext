@@ -461,8 +461,9 @@ String_contains_char(const StringT *self, const char character) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hello, World!");
-/// String_contains_char_in_range(string, 'W', StringIndex(0, 5)); // StringIndex(0, 0, 1)
-/// String_contains_char_in_range(string, 'W', StringIndex(0, 12)); // StringIndex(7, 8)
+/// String_contains_char_in_range(string, 'W', StringIndex(0, 5)); // StringIndex(0,
+/// 0, 1) String_contains_char_in_range(string, 'W', StringIndex(0, 12)); //
+/// StringIndex(7, 8)
 /// ```
 StringIndexT
 String_contains_char_in_range(const StringT *self, const char character,
@@ -474,8 +475,8 @@ String_contains_char_in_range(const StringT *self, const char character,
 
 /// Check if the string contains any char from the char class.
 /// Similar to regex: `[...]`
-/// Time complexity is O(n*m) where n is the length of the string and m is the length of
-/// the char class.
+/// Time complexity is O(n*m) where n is the length of the string and m is the length
+/// of the char class.
 ///
 /// # Example
 /// ```c
@@ -491,8 +492,8 @@ String_find_from_char_class(const StringT *self, const StringT *characters) {
 
 /// Check if the string contains any char from the char class in the specified range.
 /// Similar to regex: `[...]`
-/// Time complexity is O(n*m) where n is the length of the string and m is the length of
-/// the char class.
+/// Time complexity is O(n*m) where n is the length of the string and m is the length
+/// of the char class.
 ///
 /// # Example
 /// ```c
@@ -1071,8 +1072,10 @@ String_trim_right(const StringT *self) {
 
 StringT *
 String_pad(const StringT *self, ssize_t left_pad, ssize_t right_pad) {
-    StringT *left_padded = String_concatenate(String_repeat(String_from(" "), left_pad), self);
-    StringT *right_padded = String_concatenate(left_padded, String_repeat(String_from(" "), right_pad));
+    StringT *left_padded =
+        String_concatenate(String_repeat(String_from(" "), left_pad), self);
+    StringT *right_padded =
+        String_concatenate(left_padded, String_repeat(String_from(" "), right_pad));
 
     return right_padded;
 }
