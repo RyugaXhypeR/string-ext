@@ -915,22 +915,10 @@ String_swap_case(const StringT *self) {
 /// ```
 bool
 String_is_alphanumeric(const StringT *self) {
-    int alpha_present = 0;
-    int num_present = 0;
-    char c;
+    for (ssize_t i = 0; i < self->length; ++i)
+        if (!CHAR_IS_ALPHANUMERIC(self->string[i])) return false;
 
-    for (ssize_t i = 0; i < self->length; ++i) {
-        c = self->string[i];
-
-        if (CHAR_IS_ALPHABET(c))
-            alpha_present = 1;
-        else if (CHAR_IS_DIGIT(c))
-            num_present = 1;
-        else
-            return false;
-    }
-
-    return alpha_present && num_present;
+    return true;
 }
 
 /// Check if the string is alphabetic.
