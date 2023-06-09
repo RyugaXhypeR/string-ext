@@ -911,7 +911,7 @@ String_swap_case(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("Hello, World");
-/// String_is_alphanumeric(string) // false
+/// String_is_alphanumeric(string) // true
 /// ```
 bool
 String_is_alphanumeric(const StringT *self) {
