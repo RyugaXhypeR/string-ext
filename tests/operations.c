@@ -60,7 +60,7 @@ test_starts_with() {
 
 static void
 test_is_alphanumeric() {
-    StringT *str = String_from("Hello");
+    StringT *str = String_from("Hello 123");
     StringT *str2 = String_from("Hello123");
     log_result(__func__, !String_is_alphanumeric(str) && String_is_alphanumeric(str2));
 }
