@@ -15,6 +15,7 @@
     (((ch) >= 'a' && (ch) <= 'z') || ((ch) >= 'A' && (ch) <= 'Z'))
 #define CHAR_IS_LOWERCASE(ch) (((ch) >= 'a' && (ch) <= 'z') || !CHAR_IS_ALPHABET(ch))
 #define CHAR_IS_UPPERCASE(ch) (((ch) >= 'A' && (ch) <= 'Z') || !CHAR_IS_ALPHABET(ch))
+#define CHAR_IS_ALPHANUMERIC(ch) ((CHAR_IS_ALPHABET(ch)) || (CHAR_IS_DIGIT(ch)))
 
 #define CHAR_TO_LOWERCASE(ch)                                                            \
     if (CHAR_IS_ALPHABET(ch)) (ch |= 0x20)
@@ -22,6 +23,10 @@
     if (CHAR_IS_ALPHABET(ch)) (ch &= ~0x20)
 #define CHAR_SWAP_CASE(ch)                                                               \
     if (CHAR_IS_ALPHABET(ch)) (ch ^= 0x20)
+
+
+#define U8_MAX 256
+#define MAX_2(a, b) ((a > b) ? (a) : (b))
 
 /// Convert negative index to C-valid index.
 /// If index is out of range, raise an exception.
@@ -350,6 +355,33 @@ String_equals(const StringT *self, const StringT *other) {
         if (self->string[i] != other->string[i]) return false;
 
     return true;
+}
+
+/// Construct the bad match table, which holds the relative positions of the letters wrt
+/// to their previous positions. For string "ABCBABA", the table would look like
+/// {A: 1, B: 1, C: 4}, these are just stored in a large array of size `U8_MAX` instead of
+/// preallocated hash_table.
+/// TODO: use smart hashing to only allocate for chars that have a possiblilty of occuring
+/// in strings other then all 256 ASCII chars.
+static void
+_construct_bad_match_table(const StringT *self, ssize_t *match_table) {
+    for (ssize_t i = 0; i < U8_MAX; i++) {
+        match_table[i] = 0;
+    }
+
+    for (ssize_t i = 0; i < self->length; i++) {
+        match_table[self->string[i]] = MAX_2(1, self->length - i - 1);
+    }
+}
+
+/// Compare the string and substring from a starting point in reverse.
+static bool
+_reverse_string_compare_from_starting_point(const StringT *self, const StringT *sub,
+                                            size_t start) {
+    ssize_t j = sub->length - 1;
+    for (ssize_t i = start; j >= 0 && self->string[i] == sub->string[j]; i--, j--)
+        ;
+    return j < 0;
 }
 
 /// Check if the string contains a given string.
