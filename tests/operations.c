@@ -126,8 +126,13 @@ test_contains() {
     StringT *str2 = String_from("l");
     StringT *str3 = String_from("lo");
 
-    log_result(__func__,
-               String_contains(str, str2).stop && String_contains(str, str3).stop);
+    StringIndexT cont1 = String_contains(str, str2);
+    StringIndexT cont2 = String_contains(str, str3);
+    StringIndexT cont1_expected = StringIndex(2, 3, 1);
+    StringIndexT cont2_expected = StringIndex(3, 5, 1);
+
+    log_result(__func__, string_index_equal(cont1, cont1_expected) &&
+                             string_index_equal(cont2, cont2_expected));
 }
 
 static void
@@ -135,10 +140,16 @@ test_contains_in_range() {
     StringT *str = String_from("Hello, World");
     StringT *str2 = String_from("l");
     StringT *str3 = String_from("lo");
-    int contains_str2 = String_contains_in_range(str, str2, StringIndex(0, 4, 1)).stop;
-    int contains_str3 = !String_contains_in_range(str, str3, StringIndex(0, 4, 1)).stop;
 
-    log_result(__func__, contains_str2 && contains_str3);
+    StringIndexT contains_str2 =
+        String_contains_in_range(str, str2, StringIndex(0, 4, 1));
+    StringIndexT contains_str3 =
+        String_contains_in_range(str, str3, StringIndex(0, 4, 1));
+    StringIndexT contains_str2_expected = StringIndex(2, 3, 1);
+    StringIndexT contains_str3_expected = StringIndex(0, 0, 1);
+
+    log_result(__func__, string_index_equal(contains_str2, contains_str2_expected) &&
+                             string_index_equal(contains_str3, contains_str3_expected));
 }
 
 static void
