@@ -112,6 +112,12 @@ test_count() {
     StringT *str3 = String_from("lo");
 
     log_result(__func__, String_count(str, str2) == 3 && String_count(str, str3) == 1);
+    ssize_t count_str2 = String_count(str, str2);
+    ssize_t count_str3 = String_count(str, str3);
+    ssize_t count_str2_expected = 3;
+    ssize_t count_str3_expected = 1;
+
+    log_result(__func__, count_str2 == count_str2_expected && count_str3 == count_str3_expected);
 }
 
 static void
