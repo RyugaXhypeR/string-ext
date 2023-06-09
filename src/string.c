@@ -405,7 +405,7 @@ String_contains(const StringT *self, const StringT *other) {
 /// string.
 /// consume less memory and time.
 ///
-/// Implemented using Booyer-Moore algorithm.
+/// Implemented using Boyer-Moore algorithm.
 /// For more information checkout:
 /// https://en.wikipedia.org/wiki/Boyer–Moore_string-search_algorithm
 ///
