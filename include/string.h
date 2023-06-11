@@ -2,7 +2,7 @@
 #define STRING_H
 
 #include <stdbool.h>
-#include <stdlib.h>
+#include <stdlib.h> /* ssize_t */
 
 typedef struct {
     char *string;
