@@ -2,9 +2,9 @@
 
 #include "../include/dbg.h"
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdarg.h> /* va_list, va_start, va_arg, va_end */
+#include <stdlib.h> /* malloc, realloc */
+#include <string.h> /* memset */
 
 
 #define WHITESPACE_CHARS " \t\n\r"
