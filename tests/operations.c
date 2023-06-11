@@ -59,7 +59,8 @@ test_starts_with() {
     StringT *str2 = String_from("Hello");
     StringT *str3 = String_from("World");
 
-    log_result(__func__, String_starts_with(str1, str2) && !String_starts_with(str1, str3));
+    log_result(__func__,
+               String_starts_with(str1, str2) && !String_starts_with(str1, str3));
     STRING_FREE_MULTIPLE(str1, str2, str3);
 }
 
@@ -92,20 +93,24 @@ test_is_lowercase() {
 
 static void
 test_is_numeric() {
-    StringT *str1 = String_from("123");
-    StringT *str2 = String_from("Hello, World");
+    StringT *is_int = String_from("1024");
+    StringT *is_real = String_from("512.25");
+    StringT *is_neither = String_from("foo");
 
-    log_result(__func__, String_is_numeric(str1) && !String_is_numeric(str2));
-    STRING_FREE_MULTIPLE(str1, str2);
+    log_result(__func__, String_is_int(is_int) && !String_is_int(is_real) &&
+                             !String_is_int(is_neither));
+    STRING_FREE_MULTIPLE(is_int, is_real, is_neither);
 }
 
 static void
 test_is_decimal() {
-    StringT *str1 = String_from("123.123");
-    StringT *str2 = String_from("Hello, World");
+    StringT *is_int = String_from("1024");
+    StringT *is_real = String_from("512.25");
+    StringT *is_neither = String_from("foo");
 
-    log_result(__func__, String_is_decimal(str1) && !String_is_decimal(str2));
-    STRING_FREE_MULTIPLE(str1, str2);
+    log_result(__func__, String_is_real(is_real) && String_is_real(is_int) &&
+                             !String_is_real(is_neither));
+    STRING_FREE_MULTIPLE(is_int, is_real, is_neither);
 }
 
 static void
@@ -128,7 +133,8 @@ test_count() {
     ssize_t count_str2_expected = 3;
     ssize_t count_str3_expected = 1;
 
-    log_result(__func__, count_str2 == count_str2_expected && count_str3 == count_str3_expected);
+    log_result(__func__,
+               count_str2 == count_str2_expected && count_str3 == count_str3_expected);
     STRING_FREE_MULTIPLE(str1, str2, str3);
 }
 

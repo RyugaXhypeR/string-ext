@@ -984,7 +984,7 @@ String_is_lowercase(const StringT *self) {
 /// String_is_numeric(string) // true
 /// ```
 bool
-String_is_numeric(const StringT *self) {
+String_is_int(const StringT *self) {
     for (ssize_t i = 0; i < self->length; ++i)
         if (!CHAR_IS_DIGIT(self->string[i])) return false;
 
@@ -1000,7 +1000,7 @@ String_is_numeric(const StringT *self) {
 /// String_is_decimal(string) // true
 /// ```
 bool
-String_is_decimal(const StringT *self) {
+String_is_real(const StringT *self) {
     bool decimal_found = false;
 
     for (ssize_t i = 0; i < self->length; ++i) {
