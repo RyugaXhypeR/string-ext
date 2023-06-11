@@ -1,6 +1,8 @@
 #ifndef DBG_H
 #define DBG_H
 
+#include <stdio.h>
+
 #ifdef DEBUG
 #define DBG(...)                                                                         \
     do {                                                                                 \
