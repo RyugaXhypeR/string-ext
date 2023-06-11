@@ -35,8 +35,7 @@ negative_index_to_positive(ssize_t index, size_t length) {
     if (index < 0) index += length;
 
     if (index < 0 || index >= (ssize_t)length) {
-        fprintf(stderr, "Index out of range");
-        exit(EXIT_FAILURE);
+        ERR("Index out of range");
     }
 
     return index;
@@ -92,7 +91,7 @@ StringIterator_append(StringIteratorT *self, const StringT *string) {
         self->strings = realloc(self->strings, self->allocated * sizeof *self->strings);
     }
 
-    if (self->strings) ERR("Unable to reallocate memory for strings");
+    if (self->strings == NULL) ERR("Unable to reallocate memory for strings");
 
     self->strings[self->length++] = string;
 }
@@ -122,8 +121,7 @@ StringIndex__init__(size_t nargs, ...) {
             step = va_arg(args, ssize_t);
             break;
         default:
-            fprintf(stderr, "Invalid number of arguments");
-            exit(EXIT_FAILURE);
+            ERR("Invalid number of arguments");
     }
 
     va_end(args);
@@ -133,10 +131,8 @@ StringIndex__init__(size_t nargs, ...) {
 
 StringIndexT
 StringIndex_new(ssize_t start, ssize_t stop, ssize_t step) {
-    if (step == 0) {
-        fprintf(stderr, "Step cannot be 0");
-        exit(EXIT_FAILURE);
-    }
+    if (step == 0) ERR("Step cannot be 0");
+
     return (StringIndexT){.start = start, .stop = stop, .step = step};
 }
 
@@ -443,10 +439,7 @@ String_contains_in_range(const StringT *self, const StringT *other, StringIndexT
 
     _construct_bad_match_table(other, match_table);
 
-    if (index.step != 1) {
-        fprintf(stderr, "String_contains_in_range: step must be 1");
-        exit(EXIT_FAILURE);
-    }
+    if (index.step != 1) ERR("String_contains_in_range: step must be 1");
 
     for (ssize_t i = index.start + other->length - 1; i < index.stop;) {
         shift = match_table[self->string[i]];
@@ -583,8 +576,7 @@ String_split_limit(const StringT *self, const StringT *delimiter, ssize_t limit)
     } else if (limit == -1) {
         limit = self->length;
     } else if (limit < -1) {
-        fprintf(stderr, "String_split_limit: limit must be greater than -1");
-        exit(EXIT_FAILURE);
+        ERR("String_split_limit: limit must be greater than -1");
     }
 
     index = String_contains(self, delimiter);
@@ -678,8 +670,7 @@ String_split_whitespace_limit(const StringT *self, ssize_t limit) {
     } else if (limit == -1) {
         limit = self->length;
     } else if (limit < -1) {
-        fprintf(stderr, "String_split_limit: limit must be greater than -1");
-        exit(EXIT_FAILURE);
+        ERR("String_split_limit: limit must be greater than -1");
     }
 
     for (ssize_t i = 0; i < self->length && limit--; ++i) {
@@ -718,8 +709,7 @@ String_right_split_limit(const StringT *self, const StringT *delimiter, ssize_t 
     } else if (limit == -1) {
         limit = self->length;
     } else if (limit < -1) {
-        fprintf(stderr, "String_split_limit: limit must be greater than -1");
-        exit(EXIT_FAILURE);
+        ERR("String_split_limit: limit must be greater than -1");
     }
 
     index = String_contains(self, delimiter);
@@ -770,8 +760,7 @@ static bool
 String_check_equals_in_range(const StringT *self, const StringT *other,
                              StringIndexT index) {
     if (index.stop > self->length) {
-        fprintf(stderr, "String_check_equals_in_range: index out of range");
-        exit(EXIT_FAILURE);
+        ERR("String_check_equals_in_range: index out of range");
     }
 
     if (other->length > self->length) return false;
