@@ -382,8 +382,8 @@ _construct_bad_match_table(const StringT *self, ssize_t *match_table) {
         match_table[i] = 0;
     }
 
-    for (ssize_t i = 0; i < self->length; i++) {
-        match_table[self->string[i]] = MAX_2(1, self->length - i - 1);
+    for (ssize_t i = 0; i < self->length; ++i) {
+        match_table[(int)self->string[i]] = MAX_2(1, self->length - i - 1);
     }
 }
 
@@ -392,7 +392,7 @@ static bool
 _reverse_string_compare_from_starting_point(const StringT *self, const StringT *sub,
                                             size_t start) {
     ssize_t j = sub->length - 1;
-    for (ssize_t i = start; j >= 0 && self->string[i] == sub->string[j]; i--, j--)
+    for (ssize_t i = start; j >= 0 && self->string[i] == sub->string[j]; --i, --j)
         ;
     return j < 0;
 }
@@ -442,7 +442,7 @@ String_contains_in_range(const StringT *self, const StringT *other, StringIndexT
     if (index.step != 1) ERR("String_contains_in_range: step must be 1");
 
     for (ssize_t i = index.start + other->length - 1; i < index.stop;) {
-        shift = match_table[self->string[i]];
+        shift = match_table[(int)self->string[i]];
 
         if (!shift)
             shift = other->length;
