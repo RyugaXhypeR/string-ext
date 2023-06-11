@@ -9,146 +9,161 @@ test_copy() {
     StringT *copy = String_copy(str);
 
     log_result(__func__, string_t_equals(str, copy));
+    STRING_FREE_MULTIPLE(str, copy);
 }
 
 static void
 test_concatenate() {
-    StringT *str = String_from("Hello, ");
+    StringT *str1 = String_from("Hello, ");
     StringT *str2 = String_from("World");
-    StringT *concat = String_concatenate(str, str2);
+    StringT *concat = String_concatenate(str1, str2);
     StringT *concat_expected = String_from("Hello, World");
 
     log_result(__func__, string_t_equals(concat, concat_expected));
+    STRING_FREE_MULTIPLE(str1, str2, concat, concat_expected);
 }
 
 static void
 test_concatenate_inplace() {
-    StringT *str = String_from("Hello, ");
+    StringT *str1 = String_from("Hello, ");
     StringT *str2 = String_from("World");
     StringT *concat_expected = String_from("Hello, World");
 
-    String_concatenate_inplace(str, str2);
-
-    log_result(__func__, string_t_equals(str, concat_expected));
+    String_concatenate_inplace(str1, str2);
+    log_result(__func__, string_t_equals(str1, concat_expected));
+    STRING_FREE_MULTIPLE(str1, str2, concat_expected);
 }
 
 static void
 test_equals() {
-    StringT *str = String_from("Hello, World");
+    StringT *str1 = String_from("Hello, World");
     StringT *str2 = String_from("Hello, World");
 
-    log_result(__func__, String_equals(str, str2));
+    log_result(__func__, String_equals(str1, str2));
+    STRING_FREE_MULTIPLE(str1, str2);
 }
 
 static void
 test_ends_with() {
-    StringT *str = String_from("Hello, World");
+    StringT *str1 = String_from("Hello, World");
     StringT *str2 = String_from("World");
     StringT *str3 = String_from("Hello");
 
-    log_result(__func__, String_ends_with(str, str2) && !String_ends_with(str, str3));
+    log_result(__func__, String_ends_with(str1, str2) && !String_ends_with(str1, str3));
+    STRING_FREE_MULTIPLE(str1, str2, str3);
 }
 
 static void
 test_starts_with() {
-    StringT *str = String_from("Hello, World");
+    StringT *str1 = String_from("Hello, World");
     StringT *str2 = String_from("Hello");
     StringT *str3 = String_from("World");
 
-    log_result(__func__, String_starts_with(str, str2) && !String_starts_with(str, str3));
+    log_result(__func__, String_starts_with(str1, str2) && !String_starts_with(str1, str3));
+    STRING_FREE_MULTIPLE(str1, str2, str3);
 }
 
 static void
 test_is_alphanumeric() {
-    StringT *str = String_from("Hello 123");
+    StringT *str1 = String_from("Hello 123");
     StringT *str2 = String_from("Hello123");
-    log_result(__func__, !String_is_alphanumeric(str) && String_is_alphanumeric(str2));
+
+    log_result(__func__, !String_is_alphanumeric(str1) && String_is_alphanumeric(str2));
+    STRING_FREE_MULTIPLE(str1, str2);
 }
 
 static void
 test_is_uppercase() {
-    StringT *str = String_from("HELLO, WORLD");
+    StringT *str1 = String_from("HELLO, WORLD");
     StringT *str2 = String_from("Hello, World");
 
-    log_result(__func__, String_is_uppercase(str) && !String_is_uppercase(str2));
+    log_result(__func__, String_is_uppercase(str1) && !String_is_uppercase(str2));
+    STRING_FREE_MULTIPLE(str1, str2);
 }
 
 static void
 test_is_lowercase() {
-    StringT *str = String_from("hello, world");
+    StringT *str1 = String_from("hello, world");
     StringT *str2 = String_from("Hello, World");
 
-    log_result(__func__, String_is_lowercase(str) && !String_is_lowercase(str2));
+    log_result(__func__, String_is_lowercase(str1) && !String_is_lowercase(str2));
+    STRING_FREE_MULTIPLE(str1, str2);
 }
 
 static void
 test_is_numeric() {
-    StringT *str = String_from("123");
+    StringT *str1 = String_from("123");
     StringT *str2 = String_from("Hello, World");
 
-    log_result(__func__, String_is_numeric(str) && !String_is_numeric(str2));
+    log_result(__func__, String_is_numeric(str1) && !String_is_numeric(str2));
+    STRING_FREE_MULTIPLE(str1, str2);
 }
 
 static void
 test_is_decimal() {
-    StringT *str = String_from("123.123");
+    StringT *str1 = String_from("123.123");
     StringT *str2 = String_from("Hello, World");
 
-    log_result(__func__, String_is_decimal(str) && !String_is_decimal(str2));
+    log_result(__func__, String_is_decimal(str1) && !String_is_decimal(str2));
+    STRING_FREE_MULTIPLE(str1, str2);
 }
 
 static void
 test_is_whitespace() {
-    StringT *str = String_from(" ");
+    StringT *str1 = String_from(" ");
     StringT *str2 = String_from("Hello, World");
 
-    log_result(__func__, String_is_whitespace(str) && !String_is_whitespace(str2));
+    log_result(__func__, String_is_whitespace(str1) && !String_is_whitespace(str2));
+    STRING_FREE_MULTIPLE(str1, str2);
 }
 
 static void
 test_count() {
-    StringT *str = String_from("Hello, World");
+    StringT *str1 = String_from("Hello, World");
     StringT *str2 = String_from("l");
     StringT *str3 = String_from("lo");
 
-    ssize_t count_str2 = String_count(str, str2);
-    ssize_t count_str3 = String_count(str, str3);
+    ssize_t count_str2 = String_count(str1, str2);
+    ssize_t count_str3 = String_count(str1, str3);
     ssize_t count_str2_expected = 3;
     ssize_t count_str3_expected = 1;
 
     log_result(__func__, count_str2 == count_str2_expected && count_str3 == count_str3_expected);
+    STRING_FREE_MULTIPLE(str1, str2, str3);
 }
 
 static void
 test_contains() {
-    StringT *str = String_from("Hello, World");
+    StringT *str1 = String_from("Hello, World");
     StringT *str2 = String_from("l");
     StringT *str3 = String_from("lo");
 
-    StringIndexT cont1 = String_contains(str, str2);
-    StringIndexT cont2 = String_contains(str, str3);
+    StringIndexT cont1 = String_contains(str1, str2);
+    StringIndexT cont2 = String_contains(str1, str3);
     StringIndexT cont1_expected = StringIndex(2, 3, 1);
     StringIndexT cont2_expected = StringIndex(3, 5, 1);
 
     log_result(__func__, string_index_equal(cont1, cont1_expected) &&
                              string_index_equal(cont2, cont2_expected));
+    STRING_FREE_MULTIPLE(str1, str2, str3);
 }
 
 static void
 test_contains_in_range() {
-    StringT *str = String_from("Hello, World");
+    StringT *str1 = String_from("Hello, World");
     StringT *str2 = String_from("l");
     StringT *str3 = String_from("lo");
 
     StringIndexT contains_str2 =
-        String_contains_in_range(str, str2, StringIndex(0, 4, 1));
+        String_contains_in_range(str1, str2, StringIndex(0, 4, 1));
     StringIndexT contains_str3 =
-        String_contains_in_range(str, str3, StringIndex(0, 4, 1));
+        String_contains_in_range(str1, str3, StringIndex(0, 4, 1));
     StringIndexT contains_str2_expected = StringIndex(2, 3, 1);
     StringIndexT contains_str3_expected = StringIndex(0, 0, 1);
 
     log_result(__func__, string_index_equal(contains_str2, contains_str2_expected) &&
                              string_index_equal(contains_str3, contains_str3_expected));
+    STRING_FREE_MULTIPLE(str1, str2, str3);
 }
 
 static void
@@ -158,6 +173,7 @@ test_reverse() {
     StringT *reversed_expected = String_from("!dlroW ,olleH");
 
     log_result(__func__, string_t_equals(reversed, reversed_expected));
+    STRING_FREE_MULTIPLE(str, reversed, reversed_expected);
 }
 
 static void
@@ -172,6 +188,8 @@ test_join() {
     StringT *joined_expected = String_from("Foo-Bar-Spam-Egg");
 
     log_result(__func__, string_t_equals(joined, joined_expected));
+    STRING_FREE_MULTIPLE(joined, joined_expected);
+    STRING_ITERATOR__FREE_MULTIPLE(iter);
 }
 
 static void
@@ -182,6 +200,7 @@ test_slice() {
     StringT *slice_expected = String_from("foo ");
 
     log_result(__func__, string_t_equals(slice, slice_expected));
+    STRING_FREE_MULTIPLE(str, slice, slice_expected);
 }
 
 static void
@@ -194,6 +213,7 @@ test_repeat() {
 
     log_result(__func__, string_t_equals(rep_pos, rep_pos_expected) &&
                              string_t_equals(rep_neg, rep_neg_expected));
+    STRING_FREE_MULTIPLE(rep_pos, rep_neg, rep_neg_expected, rep_pos_expected);
 }
 
 static void
@@ -203,6 +223,7 @@ test_to_upper() {
     StringT *upper_expected = String_from("FOO BAR");
 
     log_result(__func__, string_t_equals(upper, upper_expected));
+    STRING_FREE_MULTIPLE(str, upper, upper_expected);
 }
 
 static void
@@ -212,6 +233,7 @@ test_to_lower() {
     StringT *lower_expected = String_from("foo bar");
 
     log_result(__func__, string_t_equals(lower, lower_expected));
+    STRING_FREE_MULTIPLE(str, lower, lower_expected);
 }
 
 static void
@@ -221,6 +243,7 @@ test_to_title() {
     StringT *title_expected = String_from("Foo Bar");
 
     log_result(__func__, string_t_equals(title, title_expected));
+    STRING_FREE_MULTIPLE(str, title, title_expected);
 }
 
 static void
@@ -230,6 +253,7 @@ test_to_capital() {
     StringT *capital_expected = String_from("Foo bar");
 
     log_result(__func__, string_t_equals(capital, capital_expected));
+    STRING_FREE_MULTIPLE(str, capital, capital_expected);
 }
 
 static void
@@ -239,6 +263,7 @@ test_swap_case() {
     StringT *swap_case_expected = String_from("fOO bAR");
 
     log_result(__func__, string_t_equals(swap_case, swap_case_expected));
+    STRING_FREE_MULTIPLE(str, swap_case, swap_case_expected);
 }
 
 static void
@@ -248,6 +273,7 @@ test_trim_whitespace() {
     StringT *trim_expected = String_from("Foo Bar");
 
     log_result(__func__, string_t_equals(trim, trim_expected));
+    STRING_FREE_MULTIPLE(str, trim, trim_expected);
 }
 
 static void
@@ -257,6 +283,7 @@ test_centre() {
     StringT *centre_expected = String_from(" Foo Bar  ");
 
     log_result(__func__, string_t_equals(centre, centre_expected));
+    STRING_FREE_MULTIPLE(str, centre, centre_expected);
 }
 
 static void
@@ -266,6 +293,7 @@ test_left_justify() {
     StringT *left_justify_expected = String_from("Foo Bar   ");
 
     log_result(__func__, string_t_equals(left_justify, left_justify_expected));
+    STRING_FREE_MULTIPLE(str, left_justify, left_justify_expected);
 }
 
 static void
@@ -275,6 +303,7 @@ test_right_justify() {
     StringT *right_justify_expected = String_from("   Foo Bar");
 
     log_result(__func__, string_t_equals(right_justify, right_justify_expected));
+    STRING_FREE_MULTIPLE(str, right_justify, right_justify_expected);
 }
 
 int
