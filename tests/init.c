@@ -12,7 +12,7 @@ test_string_new() {
     StringT *string = String_new(size);
 
     log_result(__func__, string->allocated == size);
-    String_free(string);
+    STRING_FREE_MULTIPLE(string);
 }
 
 void
@@ -21,7 +21,7 @@ test_string_from() {
     StringT *string = String_from(str);
 
     log_result(__func__, string_equals(str, string->string));
-    String_free(string);
+    STRING_FREE_MULTIPLE(string);
 }
 
 int
