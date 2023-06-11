@@ -376,9 +376,7 @@ String_equals(const StringT *self, const StringT *other) {
 /// in strings other then all 256 ASCII chars.
 static void
 _construct_bad_match_table(const StringT *self, ssize_t *match_table) {
-    for (ssize_t i = 0; i < U8_MAX; i++) {
-        match_table[i] = 0;
-    }
+    memset(match_table, 0, (sizeof *match_table) * U8_MAX);
 
     for (ssize_t i = 0; i < self->length; ++i) {
         match_table[(int)self->string[i]] = MAX_2(1, self->length - i - 1);
