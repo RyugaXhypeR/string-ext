@@ -59,6 +59,10 @@ StringIteratorT *
 StringIterator_new() {
     StringIteratorT *self = malloc(sizeof *self);
     const StringT **string_array = malloc(sizeof **string_array);
+
+    if (self == NULL) ERR("Unable to allocate memory for `StringIteratorT`");
+    if (string_array == NULL) ERR("Unable to allocate memory for `StringT` array");
+
     *self = (StringIteratorT){
         .strings = string_array, .index = 0, .length = 0, .allocated = 1};
     return self;
@@ -87,6 +91,9 @@ StringIterator_append(StringIteratorT *self, const StringT *string) {
         self->allocated <<= 1;
         self->strings = realloc(self->strings, self->allocated * sizeof *self->strings);
     }
+
+    if (self->strings) ERR("Unable to reallocate memory for strings");
+
     self->strings[self->length++] = string;
 }
 
@@ -158,6 +165,8 @@ StringT *
 String_pre_allocated(char *str, ssize_t size) {
     StringT *string = malloc(size * (sizeof *string));
 
+    if (string == NULL) ERR("Unable to allocate memory for `StringT`");
+
     *string = (StringT){.string = str, .length = c_string_length(str), .allocated = size};
 
     return string;
@@ -180,15 +189,23 @@ String_push(StringT *self, char ch) {
 StringT *
 String_new(ssize_t size) {
     StringT *self = malloc(sizeof *self);
-    *self = (StringT){.string = malloc(size), .length = 0, .allocated = size};
+    char *string = malloc(size * (sizeof *string));
+
+    if (self == NULL) ERR("Unable to allocate memory for `StringT`");
+    if (string == NULL) ERR("Unable to allocate memory for `char *`");
+
+    *self = (StringT){.string = string, .length = 0, .allocated = size};
     return self;
 }
 
 /// Create StrngT object from string array of given length.
 static StringT *
 String_from_char_array_with_length(const char *string, ssize_t length) {
-    char *new_string = malloc((length + 1) * sizeof *new_string);
     StringT *self = malloc(sizeof *self);
+    char *new_string = malloc((length + 1) * sizeof *new_string);
+
+    if (self == NULL) ERR("Unable to allocate memory for `StringT`");
+    if (new_string == NULL) ERR("Unable to allocate memory for `char *`");
 
     for (ssize_t i = 0; i < length; ++i) new_string[i] = string[i];
     new_string[length] = '\0';
