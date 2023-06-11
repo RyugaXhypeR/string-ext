@@ -4,7 +4,6 @@
 
 #include <stdarg.h> /* va_list, va_start, va_arg, va_end */
 #include <stdlib.h> /* malloc, realloc */
-#include <string.h> /* memset */
 
 
 #define WHITESPACE_CHARS " \t\n\r"
@@ -377,8 +376,6 @@ String_equals(const StringT *self, const StringT *other) {
 /// in strings other then all 256 ASCII chars.
 static void
 _construct_bad_match_table(const StringT *self, ssize_t *match_table) {
-    memset(match_table, 0, (sizeof *match_table) * U8_MAX);
-
     for (ssize_t i = 0; i < self->length; ++i) {
         match_table[(int)self->string[i]] = MAX_2(1, self->length - i - 1);
     }
@@ -431,7 +428,7 @@ String_contains(const StringT *self, const StringT *other) {
 StringIndexT
 String_contains_in_range(const StringT *self, const StringT *other, StringIndexT index) {
     StringIndexT not_found = StringIndex(0, 0, 1);
-    ssize_t match_table[U8_MAX];
+    ssize_t match_table[U8_MAX] = {0};
     ssize_t shift;
 
     _construct_bad_match_table(other, match_table);
