@@ -345,6 +345,7 @@ String_repeat(const StringT *self, ssize_t times) {
     new_string = String_pre_allocated(self->string, new_length);
 
     for (ssize_t i = 1; i < times; ++i) String_concatenate_inplace(new_string, self);
+    new_string->string[new_length] = '\0';
 
     return new_string;
 }
