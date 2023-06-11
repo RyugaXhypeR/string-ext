@@ -981,7 +981,7 @@ String_is_lowercase(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("12345");
-/// String_is_numeric(string) // true
+/// String_is_int(string) // true
 /// ```
 bool
 String_is_int(const StringT *self) {
@@ -997,7 +997,7 @@ String_is_int(const StringT *self) {
 /// # Example
 /// ```c
 /// StringT *string = String_from("123.45");
-/// String_is_decimal(string) // true
+/// String_is_real(string) // true
 /// ```
 bool
 String_is_real(const StringT *self) {
