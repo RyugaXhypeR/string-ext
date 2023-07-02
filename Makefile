@@ -3,13 +3,19 @@
 D_MK = .build
 D_INC = include
 D_SRC = src
-D_TEST = test
+D_TEST = tests
 
 EF_BIN = $(D_MK)/bin
 CF_SRC = $(wildcard $(D_SRC)/*.c)
 CF_TEST = $(wildcard $(D_TEST)/*.c)
+HF_INC = $(wildcard $(D_INC)/*.h)
+CF_SRC_NO_DIR = $(notdir $(CF_SRC))
+HF_INC_NO_DIR = $(notdir $(HF_INC))
 
-CC = clang
+# Library installation locations
+D_INC_INSTALL = /usr/local/include
+D_LIB_INSTALL = /usr/local/lib
+
 OPT = -O1
 # A debug flag, when `D` is set to `DEBUG`, certain methods from the library
 # will print debug information.
@@ -24,6 +30,8 @@ OF_SRC = $(CF_SRC:%.c=$(D_MK)/%.o)
 AF_SRC = $(CF_SRC:%.c=$(D_MK)/%.a)
 EF_TEST = $(CF_TEST:%.c=$(D_MK)/%.out)
 DF_SRC = $(OF_SRC:%.o=%.d)
+HF_INST = $(HF_INC_NO_DIR:%.h=$(D_INC_INSTALL)/%.h)
+AF_INST = $(CF_SRC_NO_DIR:%.c=$(D_LIB_INSTALL)/%.a)
 
 .PHONY: all clean
 
@@ -49,6 +57,14 @@ $(D_MK)/%.out: %.c $(AF_SRC)
 	$(CC) $(C_FLAGS) -o $@ $^
 
 -include $(DF_SRC)
+
+install: $(AF_SRC)
+	mkdir -p $(D_INC_INSTALL) $(D_LIB_INSTALL)
+	cp $(D_INC)/* $(D_INC_INSTALL)
+	cp $^ $(D_LIB_INSTALL)
+
+uninstall:
+	$(RM) $(HF_INST) $(AF_INST)
 
 clean:
 	$(RM) -rf $(D_MK)
