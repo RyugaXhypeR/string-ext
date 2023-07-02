@@ -3,3 +3,4 @@
 .code/
 
 main.c
+compile_commands.json
