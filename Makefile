@@ -1,10 +1,13 @@
 # The build directory which will store intermediate 
 # forms of the files in the same format as main.
 D_MK = .build
+D_INC = include
+D_SRC = src
+D_TEST = test
 
 EF_BIN = $(D_MK)/bin
-CF_SRC = $(wildcard src/*.c)
-CF_TEST = $(wildcard tests/*.c)
+CF_SRC = $(wildcard $(D_SRC)/*.c)
+CF_TEST = $(wildcard $(D_TEST)/*.c)
 
 CC = clang
 OPT = -O1
@@ -15,7 +18,7 @@ OPT = -O1
 #
 # Example: `make D=DEBUG`
 D = NDEBUG 
-C_FLAGS = -Wall -Wextra -g $(OPT) -fPIE -D$(D) -Iinclude/
+C_FLAGS = -Wall -Wextra -g $(OPT) -fPIE -D$(D) -I$(D_SRC) -I$(D_INC)
 
 OF_SRC = $(CF_SRC:%.c=$(D_MK)/%.o)
 AF_SRC = $(CF_SRC:%.c=$(D_MK)/%.a)
