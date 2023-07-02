@@ -12,6 +12,7 @@
     } while (0)
 #else
 #define DBG(...)
+#endif
 
 #define ERR(...)                                                                         \
     do {                                                                                 \
@@ -20,6 +21,5 @@
         fprintf(stderr, "\n");                                                           \
         exit(EXIT_FAILURE);                                                              \
     } while (0)
-#endif
 
 #endif /* DBG_H */
