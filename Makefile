@@ -23,7 +23,7 @@ OPT = -O1
 # it will print information about the allocation.
 #
 # Example: `make D=DEBUG`
-D = DEBUG
+D = NDEBUG
 C_FLAGS = -Wall -Wextra -g $(OPT) -fPIE -D$(D) -I$(D_SRC) -I$(D_INC)
 
 OF_SRC = $(CF_SRC:%.c=$(D_MK)/%.o)
