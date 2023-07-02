@@ -1,6 +1,6 @@
-#include "../include/str.h"
+#include "str.h"
 
-#include "../include/dbg.h"
+#include "str_dbg.h"
 
 #include <stdarg.h> /* va_list, va_start, va_arg, va_end */
 #include <stdlib.h> /* malloc, realloc */

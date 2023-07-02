@@ -1,7 +1,7 @@
 /// Tests the initlialization of the `StringT` object.
 
-#include "../include/str.h"
-#include "../include/utils.h"
+#include "str.h"
+#include "str_utils.h"
 
 void
 test_string_new() {
