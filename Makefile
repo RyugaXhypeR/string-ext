@@ -1,4 +1,4 @@
-# The build directory which will store intermediate 
+# The build directory which will store intermediate
 # forms of the files in the same format as main.
 D_MK = .build
 D_INC = include
@@ -19,11 +19,11 @@ D_LIB_INSTALL = /usr/local/lib
 OPT = -O1
 # A debug flag, when `D` is set to `DEBUG`, certain methods from the library
 # will print debug information.
-# For example: When string has to allocate extra memory, 
+# For example: When string has to allocate extra memory,
 # it will print information about the allocation.
 #
 # Example: `make D=DEBUG`
-D = NDEBUG 
+D = DEBUG
 C_FLAGS = -Wall -Wextra -g $(OPT) -fPIE -D$(D) -I$(D_SRC) -I$(D_INC)
 
 OF_SRC = $(CF_SRC:%.c=$(D_MK)/%.o)
