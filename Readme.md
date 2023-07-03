@@ -1,3 +1,18 @@
-# String
+# String-Ext
 
-A c-library to perform high level string operations on c-strings.
+A wrapper around c-strings to provide high level string functions.
+
+## Installation
+
+```bash
+git clone https://github.com/RyugaXhypeR/string
+cd string
+make install
+```
+
+## Usage
+
+```c
+#include <string_ext.h>
+```
+
