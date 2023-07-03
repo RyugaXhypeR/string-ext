@@ -1,6 +1,6 @@
-#include "str_utils.h"
+#include "string_utils.h"
 
-#include "str.h"
+#include "string_ext.h"
 
 int
 string_t_equals(StringT *str1, StringT *str2) {

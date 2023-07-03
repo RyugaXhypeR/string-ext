@@ -1,5 +1,5 @@
-#include "str.h"
-#include "str_utils.h"
+#include "string_ext.h"
+#include "string_utils.h"
 
 #include <stdio.h>
 

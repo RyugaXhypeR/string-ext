@@ -1,7 +1,7 @@
 #ifndef UNIT_TEST_UTILS_H
 #define UNIT_TEST_UTILS_H
 
-#include "str.h"
+#include "string_ext.h"
 
 #include <stdarg.h>
 #include <stdio.h>
