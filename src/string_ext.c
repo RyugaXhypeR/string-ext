@@ -31,9 +31,10 @@
 /// If index is out of range, raise an exception.
 static ssize_t
 negative_index_to_positive(ssize_t index, size_t length) {
-    if (index < 0) index += length;
+    if (index >= 0) return index;
 
-    if (index < 0 || index >= (ssize_t)length) ERR("Index out of range");
+    index += length;
+    if (index < 0) ERR("Index out of range");
 
     return index;
 }
