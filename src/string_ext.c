@@ -58,7 +58,7 @@ c_string_length(const char *string) {
 /* ------------------------------ StringIteratorT ------------------------------ */
 
 
-/* Create and return a new `StringIteratorT` object. */
+/** Create and return a new ``StringIteratorT`` object. */
 StringIteratorT *
 StringIterator_new() {
     StringIteratorT *self = malloc(sizeof *self);
@@ -76,7 +76,7 @@ StringIterator_new() {
  * Get the next value from the iterator.
  *
  * ..note:: The iterator will be incremented then the value will be returned.
- * */
+ */
 const StringT *
 StringIterator_next(StringIteratorT *self) {
     if (self->index >= self->length) return NULL;
@@ -93,7 +93,7 @@ StringIterator_get(StringIteratorT *self) {
  * De-allocate memory stored for the iterator.
  *
  * ..note:: This function doesn't the ``StringT's``, it just frees the array.
- * */
+ */
 void
 StringIterator_free(StringIteratorT *self) {
     free(self->strings);
@@ -121,7 +121,7 @@ StringIterator_append(StringIteratorT *self, const StringT *string) {
  * attribute values (start, stop, step).
  *
  * ..note:: This should only be used by ``StringIndex`` macro.
- * */
+ */
 StringIndexT
 StringIndex__init__(size_t nargs, ...) {
     va_list args;
@@ -154,10 +154,8 @@ StringIndex__init__(size_t nargs, ...) {
     return StringIndex_new(start, stop, step);
 }
 
-/**
- * Create and return a new ``StringIndexT`` object, three parameters (start, stop, step)
- * passed in.
- */
+/** Create and return a new ``StringIndexT`` object, three parameters (start, stop, step)
+ * passed in. */
 StringIndexT
 StringIndex_new(ssize_t start, ssize_t stop, ssize_t step) {
     if (step == 0) ERR("Step cannot be 0");
@@ -177,7 +175,7 @@ StringIndexT
 StringIndex_normalize(StringIndexT self, ssize_t length) {
     self.start = negative_index_to_positive(self.start, length);
     self.stop = negative_index_to_positive(self.stop, length);
-    self.step = negative_index_to_positive(self.step, length);
+    self.stop = abs(self.stop);
 
     return self;
 }
@@ -201,7 +199,7 @@ StringIndex_len(StringIndexT self) {
  *
  * .. code-block:: c
  *
- *   StringT *string = String_new(10);
+ *    StringT *string = String_new(10);
  */
 StringT *
 String_new(ssize_t size) {
@@ -280,8 +278,8 @@ String_re_allocate(StringT *self, ssize_t new_size) {
  * Allocate exactly the amount of memory requested for the ``StringT`` object.ly
  *
  * .. note::
- *  * This function will allocate regardless of the current allocated size.
- *  * If DEBUG is defined, this function will print a debug message.
+ *    * This function will allocate regardless of the current allocated size.
+ *    * If DEBUG is defined, this function will print a debug message.
  */
 StringT *
 String_pre_allocated(char *str, ssize_t size) {
@@ -893,10 +891,6 @@ String_split_whitespace_limit(const StringT *self, ssize_t limit) {
  *
  *    assert(StringIterator_len(strings) == 1);
  *    assert(String_eq(StringIterator_next(strings), "Hello"));
- * @param self
- * @param delimiter
- * @param index
- * @return
  */
 StringIteratorT *
 String_split_in_range(const StringT *self, const StringT *delimiter, StringIndexT index) {
