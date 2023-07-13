@@ -278,7 +278,7 @@ String_re_allocate(StringT *self, ssize_t new_size) {
 }
 
 /**
- * Allocate exactly the amount of memory requested for the ``StringT`` object.ly
+ * Allocate exactly the amount of memory requested for the ``StringT`` object.
  *
  * .. note::
  *    * This function will allocate regardless of the current allocated size.
@@ -286,13 +286,14 @@ String_re_allocate(StringT *self, ssize_t new_size) {
  */
 StringT *
 String_pre_allocated(char *str, ssize_t size) {
-    StringT *string = malloc(size * (sizeof *string));
+    char *string = malloc(size * (sizeof *string));
+    StringT *self = malloc(sizeof *self);
 
     if (string == NULL) ERR("Unable to allocate memory for `StringT`");
 
-    *string = (StringT){.string = str, .length = c_string_length(str), .allocated = size};
+    *self = (StringT){.string = str, .length = c_string_length(str), .allocated = size};
 
-    return string;
+    return self;
 }
 
 /**
