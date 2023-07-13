@@ -165,7 +165,7 @@ StringIndex_new(ssize_t start, ssize_t stop, ssize_t step) {
 
 /**
  * Normalize the ``StringIndexT`` object by converting negative indices to positive
- * indices.
+ * indices when step is positive.
  *
  * .. note::
  *    * This function doesn't check if the indices are out of range.
@@ -173,9 +173,12 @@ StringIndex_new(ssize_t start, ssize_t stop, ssize_t step) {
  */
 StringIndexT
 StringIndex_normalize(StringIndexT self, ssize_t length) {
+    if (self.stop < 0) {
+        return self;
+    }
+
     self.start = negative_index_to_positive(self.start, length);
     self.stop = negative_index_to_positive(self.stop, length);
-    self.stop = abs(self.stop);
 
     return self;
 }
