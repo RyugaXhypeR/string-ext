@@ -11,17 +11,22 @@ A wrapper around c-strings to provide high level string functions.
 Installation
 ------------
 
+On Unix, Linux and macOS:
+
 .. code-block:: bash
 
-    git clone https://github.com/RyugaXhypeR/string
-    cd string
-    make install
+   autoreconf --install
+   ./configure
+   make
+   make install
+
 
 Usage
 -----
 
-Include the header file ``string_ext.h`` after installation.
+After installation, include the header file ``string_ext.h`` to use it.
+Also, link the library file ``/usr/local/lib/libstringext.a`` while compiling
 
-While compiling, pass in the ``/usr/local/lib/string_ext.a`` shared library file like so::
-    
-    cc <input-file.c> /usr/local/lib/string_ext.a
+.. code-block:: bash
+
+   cc <input-file.c> /usr/local/lib/libstringext.a
