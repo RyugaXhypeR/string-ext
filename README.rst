@@ -18,5 +18,5 @@ Usage
 
 .. code-block:: c
 
-   #include <stdio.h>
+   #include <string-ext.h>
 
