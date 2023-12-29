@@ -1,6 +1,10 @@
 .build/
 .idea/
 .code/
+.cache/
+src/.deps/
+src/.dirstamp
 
 main.c
 compile_commands.json
+
