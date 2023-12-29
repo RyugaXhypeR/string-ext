@@ -16,7 +16,8 @@ Installation
 Usage
 -----
 
-.. code-block:: c
+Include the header file `string_ext.h` after installation.
 
-   #include <string-ext.h>
-
+While compiling, pass in the `/usr/local/lib/string_ext.a` shared library file like so::
+    
+    cc <input-file.c> /usr/local/lib/string_ext.a
