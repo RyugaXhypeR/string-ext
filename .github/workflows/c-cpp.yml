@@ -13,7 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: autoreconf
+      run: autoreconf --install
+    - name: configure
+      run: ./configure
     - name: make
       run: make
+    - name: dist-check
+      run: make dist
     - name: test
       run: make test
