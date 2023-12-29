@@ -1,6 +1,10 @@
 String-Ext
 ==========
 
+.. image:: https://www.github.com/RyugaXhypeR/string-ext/actions/workflows/c-cpp.yml/badge.svg
+   :alt: Build Status
+   :target: https://github.com/RyugaXhypeR/string-ext/actions
+
 A wrapper around c-strings to provide high level string functions.
 
 
