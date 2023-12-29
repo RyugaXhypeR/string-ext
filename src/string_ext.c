@@ -33,10 +33,14 @@
  */
 static ssize_t
 negative_index_to_positive(ssize_t index, size_t length) {
-    if (index >= 0) return index;
+    if (index >= 0) {
+        return index;
+    }
 
     index += length;
-    if (index < 0) ERR("Index out of range");
+    if (index < 0) {
+        ERR("Index out of range");
+    }
 
     return index;
 }
@@ -50,7 +54,9 @@ static size_t
 c_string_length(const char *string) {
     size_t length = 0;
 
-    while (*string++) length++;
+    while (*string++) {
+        length++;
+    }
 
     return length;
 }
@@ -64,8 +70,12 @@ StringIterator_new() {
     StringIteratorT *self = malloc(sizeof *self);
     const StringT **string_array = malloc(sizeof **string_array);
 
-    if (self == NULL) ERR("Unable to allocate memory for `StringIteratorT`");
-    if (string_array == NULL) ERR("Unable to allocate memory for `StringT` array");
+    if (self == NULL) {
+        ERR("Unable to allocate memory for `StringIteratorT`");
+    }
+    if (string_array == NULL) {
+        ERR("Unable to allocate memory for `StringT` array");
+    }
 
     *self = (StringIteratorT){
         .strings = string_array, .index = 0, .length = 0, .allocated = 1};
@@ -79,7 +89,9 @@ StringIterator_new() {
  */
 const StringT *
 StringIterator_next(StringIteratorT *self) {
-    if (self->index >= self->length) return NULL;
+    if (self->index >= self->length) {
+        return NULL;
+    }
     return self->strings[self->index++];
 }
 
@@ -108,7 +120,9 @@ StringIterator_append(StringIteratorT *self, const StringT *string) {
         self->strings = realloc(self->strings, self->allocated * sizeof *self->strings);
     }
 
-    if (self->strings == NULL) ERR("Unable to reallocate memory for strings");
+    if (self->strings == NULL) {
+        ERR("Unable to reallocate memory for strings");
+    }
 
     self->strings[self->length++] = string;
 }
@@ -158,7 +172,9 @@ StringIndex__init__(size_t nargs, ...) {
  * passed in. */
 StringIndexT
 StringIndex_new(ssize_t start, ssize_t stop, ssize_t step) {
-    if (step == 0) ERR("Step cannot be 0");
+    if (step == 0) {
+        ERR("Step cannot be 0");
+    }
 
     return (StringIndexT){.start = start, .stop = stop, .step = step};
 }
@@ -186,7 +202,8 @@ StringIndex_normalize(StringIndexT self, ssize_t length) {
 /** Check if the ``StringIndexT`` object is valid. */
 bool
 StringIndex_equal(StringIndexT self, StringIndexT other) {
-    return self.start == other.start && self.stop == other.stop && self.step == other.step;
+    return self.start == other.start && self.stop == other.stop &&
+           self.step == other.step;
 }
 
 /** Calculate the length of the ``StringIndexT`` object. */
@@ -209,8 +226,12 @@ String_new(ssize_t size) {
     StringT *self = malloc(sizeof *self);
     char *string = malloc(size * (sizeof *string));
 
-    if (self == NULL) ERR("Unable to allocate memory for `StringT`");
-    if (string == NULL) ERR("Unable to allocate memory for `char *`");
+    if (self == NULL) {
+        ERR("Unable to allocate memory for `StringT`");
+    }
+    if (string == NULL) {
+        ERR("Unable to allocate memory for `char *`");
+    }
 
     *self = (StringT){.string = string, .length = 0, .allocated = size};
     return self;
@@ -230,10 +251,16 @@ String_from_char_array_with_length(const char *string, ssize_t length) {
     StringT *self = malloc(sizeof *self);
     char *new_string = malloc((length + 1) * sizeof *new_string);
 
-    if (self == NULL) ERR("Unable to allocate memory for `StringT`");
-    if (new_string == NULL) ERR("Unable to allocate memory for `char *`");
+    if (self == NULL) {
+        ERR("Unable to allocate memory for `StringT`");
+    }
+    if (new_string == NULL) {
+        ERR("Unable to allocate memory for `char *`");
+    }
 
-    for (ssize_t i = 0; i < length; ++i) new_string[i] = string[i];
+    for (ssize_t i = 0; i < length; ++i) {
+        new_string[i] = string[i];
+    }
     new_string[length] = '\0';
 
     *self = (StringT){.string = new_string, .length = length, .allocated = length};
@@ -254,7 +281,6 @@ StringT *
 String_from(const char *_string) {
     return String_from_char_array_with_length(_string, c_string_length(_string));
 }
-
 
 /**
  * Internal function to re-allocate memory for the ``StringT`` object.
@@ -427,9 +453,9 @@ String_concatenate(const StringT *self, const StringT *other) {
 
     String_re_allocate(concatenated_string, self->length + other->length);
 
-    for (ssize_t i = 0; i < other->length; ++i)
+    for (ssize_t i = 0; i < other->length; ++i) {
         concatenated_string->string[i + self->length] = other->string[i];
-
+    }
     concatenated_string->length += other->length;
 
     return concatenated_string;
@@ -452,8 +478,9 @@ void
 String_concatenate_inplace(StringT *self, const StringT *other) {
     String_re_allocate(self, self->length + other->length);
 
-    for (ssize_t i = 0; i < other->length; ++i)
+    for (ssize_t i = 0; i < other->length; ++i) {
         self->string[self->length++] = other->string[i];
+    }
 }
 
 /**
@@ -473,17 +500,20 @@ String_repeat(const StringT *self, ssize_t times) {
     ssize_t new_length;
     StringT *new_string;
 
-    if (times < 0) return String_new(0);
+    if (times < 0) {
+        return String_new(0);
+    }
 
     new_length = self->length * times;
     new_string = String_pre_allocated(self->string, new_length);
 
-    for (ssize_t i = 1; i < times; ++i) String_concatenate_inplace(new_string, self);
+    for (ssize_t i = 1; i < times; ++i) {
+        String_concatenate_inplace(new_string, self);
+    }
     new_string->string[new_length] = '\0';
 
     return new_string;
 }
-
 
 /**
  * Check if two ``StringT`` objects are equal.
@@ -555,7 +585,8 @@ String_contains(const StringT *self, const StringT *other) {
  * range.
  *
  * .. note:: Implementation is based on the `Boyer Moore Horspool algorithm`_.
- * .. _Boyer Moore Horspool algorithm:: https://en.wikipedia.org/wiki/Boyer–Moore–Horspool_algorithm
+ * .. _Boyer Moore Horspool algorithm::
+ * https://en.wikipedia.org/wiki/Boyer–Moore–Horspool_algorithm
  */
 StringIndexT
 String_contains_in_range(const StringT *self, const StringT *other, StringIndexT index) {
@@ -570,15 +601,18 @@ String_contains_in_range(const StringT *self, const StringT *other, StringIndexT
     for (ssize_t i = index.start + other->length - 1; i < index.stop;) {
         shift = match_table[(int)self->string[i]];
 
-        if (!shift)
+        if (!shift) {
             shift = other->length;
-        else if (_reverse_string_compare_from_starting_point(self, other, i))
+        } else if (_reverse_string_compare_from_starting_point(self, other, i)) {
             return StringIndex(i - other->length + 1, i + 1);
+        }
 
         i += shift;
     }
 
-    if (index.stop - index.start < other->length) return not_found;
+    if (index.stop - index.start < other->length) {
+        return not_found;
+    }
 
     return not_found;
 }
@@ -628,8 +662,9 @@ StringIndexT
 String_contains_char_in_range(const StringT *self, const char character,
                               StringIndexT index) {
     if (index.step != 1) ERR("String_contains_char_in_range: step must be 1");
-    for (ssize_t i = index.start; i < index.stop; i += index.step)
+    for (ssize_t i = index.start; i < index.stop; i += index.step) {
         if (self->string[i] == character) return StringIndex(i, i + 1);
+    }
     return StringIndex(0, 0, 1);
 }
 
@@ -675,7 +710,9 @@ String_find_from_char_class_in_range(const StringT *self, const StringT *charact
 
     for (ssize_t i = index.start; i < index.stop && index_length--; ++i) {
         slice_index = String_contains_char(characters, self->string[i]);
-        if (!StringIndex_len(slice_index)) continue;
+        if (!StringIndex_len(slice_index)) {
+            continue;
+        }
         return slice_index;
     }
     return not_found;
@@ -875,7 +912,9 @@ String_split_whitespace_limit(const StringT *self, ssize_t limit) {
     for (ssize_t i = 0; i < self->length && limit--; ++i) {
         if (CHAR_IS_WHITESPACE(self->string[i])) {
             StringIterator_append(iterator, String_slice(self, StringIndex(start, i)));
-            while (CHAR_IS_WHITESPACE(self->string[i]) && i < self->length) ++i;
+            while (CHAR_IS_WHITESPACE(self->string[i]) && i < self->length) {
+                ++i;
+            }
             start = i;
         }
     }
@@ -891,7 +930,8 @@ String_split_whitespace_limit(const StringT *self, ssize_t limit) {
  *
  *    StringT *string = String_from("Hello, World!");
  *    StringT *delimiter = String_from(", ");
- *    StringIteratorT *strings = String_split_in_range(string, delimiter, StringIndex(0, 5));
+ *    StringIteratorT *strings = String_split_in_range(string, delimiter, StringIndex(0,
+ * 5));
  *
  *    assert(StringIterator_len(strings) == 1);
  *    assert(String_eq(StringIterator_next(strings), "Hello"));
@@ -956,7 +996,10 @@ String_right_split_limit(const StringT *self, const StringT *delimiter, ssize_t 
             if (start != index.start) {
                 StringIterator_append(
                     iterator, String_slice(self, StringIndex(index.start, start)));
-                if (!--limit) break;
+
+                if (!--limit) {
+                    break;
+                }
             }
             start = index.start - 1;
         }
@@ -1014,10 +1057,15 @@ String_check_equals_in_range(const StringT *self, const StringT *other,
         ERR("String_check_equals_in_range: index out of range");
     }
 
-    if (other->length > self->length) return false;
+    if (other->length > self->length) {
+        return false;
+    }
 
-    for (ssize_t i = index.start; i < index.stop; i += index.step)
-        if (self->string[i] != other->string[i - index.start]) return false;
+    for (ssize_t i = index.start; i < index.stop; i += index.step) {
+        if (self->string[i] != other->string[i - index.start]) {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -1086,9 +1134,9 @@ StringT *
 String_to_upper(const StringT *self) {
     StringT *new_string = String_copy(self);
 
-    for (ssize_t i = 0; i < new_string->length; ++i)
+    for (ssize_t i = 0; i < new_string->length; ++i) {
         CHAR_TO_UPPERCASE(new_string->string[i]);
-
+    }
 
     return new_string;
 }
@@ -1109,8 +1157,9 @@ StringT *
 String_to_lower(const StringT *self) {
     StringT *new_string = String_copy(self);
 
-    for (ssize_t i = 0; i < new_string->length; ++i)
+    for (ssize_t i = 0; i < new_string->length; ++i) {
         CHAR_TO_LOWERCASE(new_string->string[i]);
+    }
 
     return new_string;
 }
@@ -1132,14 +1181,18 @@ String_to_title(const StringT *self) {
     StringT *new_string = String_copy(self);
     char ch;
 
-    if (!new_string->length) return new_string;
+    if (!new_string->length) {
+        return new_string;
+    }
 
     CHAR_TO_UPPERCASE(new_string->string[0]);
 
     // Capitalizing the character that comes after a space char.
     for (int i = 1; i < new_string->length - 1; ++i) {
         ch = new_string->string[i];
-        if (CHAR_IS_WHITESPACE(ch)) CHAR_TO_UPPERCASE(new_string->string[i + 1]);
+        if (CHAR_IS_WHITESPACE(ch)) {
+            CHAR_TO_UPPERCASE(new_string->string[i + 1]);
+        }
     }
 
     return new_string;
@@ -1162,8 +1215,9 @@ StringT *
 String_to_capital(const StringT *self) {
     StringT *new_string = String_copy(self);
 
-    if (!new_string->length) return new_string;
-
+    if (!new_string->length) {
+        return new_string;
+    }
     CHAR_TO_UPPERCASE(new_string->string[0]);
 
     return new_string;
@@ -1185,8 +1239,9 @@ StringT *
 String_swap_case(const StringT *self) {
     StringT *new_string = String_copy(self);
 
-    for (ssize_t i = 0; i < new_string->length; ++i)
+    for (ssize_t i = 0; i < new_string->length; ++i) {
         CHAR_SWAP_CASE(new_string->string[i]);
+    }
 
     return new_string;
 }
@@ -1208,8 +1263,11 @@ String_swap_case(const StringT *self) {
  */
 bool
 String_is_alphanumeric(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_ALPHANUMERIC(self->string[i])) return false;
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (!CHAR_IS_ALPHANUMERIC(self->string[i])) {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -1230,8 +1288,11 @@ String_is_alphanumeric(const StringT *self) {
  */
 bool
 String_is_alphabetic(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_ALPHABET(self->string[i])) return false;
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (!CHAR_IS_ALPHABET(self->string[i])) {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -1251,8 +1312,11 @@ String_is_alphabetic(const StringT *self) {
  */
 bool
 String_is_uppercase(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_UPPERCASE(self->string[i])) return false;
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (!CHAR_IS_UPPERCASE(self->string[i])) {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -1272,8 +1336,11 @@ String_is_uppercase(const StringT *self) {
  */
 bool
 String_is_lowercase(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_LOWERCASE(self->string[i])) return false;
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (!CHAR_IS_LOWERCASE(self->string[i])) {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -1293,8 +1360,11 @@ String_is_lowercase(const StringT *self) {
  */
 bool
 String_is_int(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_DIGIT(self->string[i])) return false;
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (!CHAR_IS_DIGIT(self->string[i])) {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -1320,7 +1390,9 @@ String_is_real(const StringT *self) {
 
     for (ssize_t i = 0; i < self->length; ++i) {
         if (self->string[i] == '.') {
-            if (decimal_found) return false;
+            if (decimal_found) {
+                return false;
+            }
             decimal_found = true;
         } else if (!CHAR_IS_DIGIT(self->string[i]))
             return false;
@@ -1344,8 +1416,11 @@ String_is_real(const StringT *self) {
  */
 bool
 String_is_whitespace(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_WHITESPACE(self->string[i])) return false;
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (!CHAR_IS_WHITESPACE(self->string[i])) {
+            return false;
+        }
+    }
 
     return true;
 }
@@ -1381,9 +1456,11 @@ String_trim_whitespace(const StringT *self) {
  */
 StringT *
 String_trim_left(const StringT *self) {
-    for (ssize_t i = 0; i < self->length; ++i)
-        if (!CHAR_IS_WHITESPACE(self->string[i]))
+    for (ssize_t i = 0; i < self->length; ++i) {
+        if (!CHAR_IS_WHITESPACE(self->string[i])) {
             return String_slice(self, StringIndex(i, self->length));
+        }
+    }
     return String_copy(self);
 }
 
@@ -1400,9 +1477,11 @@ String_trim_left(const StringT *self) {
  */
 StringT *
 String_trim_right(const StringT *self) {
-    for (ssize_t i = self->length - 1; i >= 0; --i)
-        if (!CHAR_IS_WHITESPACE(self->string[i]))
+    for (ssize_t i = self->length - 1; i >= 0; --i) {
+        if (!CHAR_IS_WHITESPACE(self->string[i])) {
             return String_slice(self, StringIndex(i + 1));
+        }
+    }
     return String_copy(self);
 }
 
@@ -1440,7 +1519,9 @@ StringT *
 String_centre(const StringT *self, ssize_t width) {
     ssize_t margin, left_pad;
 
-    if (self->length >= width) return String_copy(self);
+    if (self->length >= width) {
+        return String_copy(self);
+    }
 
     margin = width - self->length;
     left_pad = margin / 2;
@@ -1463,7 +1544,9 @@ StringT *
 String_left_justify(const StringT *self, ssize_t width) {
     ssize_t length_to_fill = width - self->length;
 
-    if (length_to_fill < 0) return String_copy(self);
+    if (length_to_fill < 0) {
+        return String_copy(self);
+    }
 
     // Concatenate the string with `length_to_fill` number of whitespaces
     return String_concatenate(self, String_repeat(String_from(" "), length_to_fill));
@@ -1484,7 +1567,9 @@ StringT *
 String_right_justify(const StringT *self, ssize_t width) {
     ssize_t length_to_fill = width - self->length;
 
-    if (length_to_fill < 0) return String_copy(self);
+    if (length_to_fill < 0) {
+        return String_copy(self);
+    }
 
     // Concatenate `length_to_fill` number of whitespaces with the string.
     return String_concatenate(String_repeat(String_from(" "), length_to_fill), self);
@@ -1505,9 +1590,10 @@ StringIteratorT *
 String_chunks(const StringT *self, ssize_t chunk_size) {
     StringIteratorT *iterator = StringIterator_new();
 
-    for (ssize_t i = 0; i < self->length; i += chunk_size)
+    for (ssize_t i = 0; i < self->length; i += chunk_size) {
         StringIterator_append(iterator,
                               String_slice(self, StringIndex(i, i + chunk_size)));
+    }
 
     return iterator;
 }
@@ -1528,7 +1614,9 @@ String_count(const StringT *self, const StringT *sub_string) {
     ssize_t count = 0;
     StringIndexT contains = String_contains(self, sub_string);
 
-    if (!contains.stop) return 0;
+    if (!contains.stop) {
+        return 0;
+    }
 
     while (contains.stop) {
         contains = String_contains_in_range(self, sub_string,
