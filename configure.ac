@@ -1,4 +1,4 @@
-m4_define([STRING_EXT_VERSION], [1.0])
+m4_define([STRING_EXT_VERSION], [1.0.0])
 
 AC_INIT([string_ext], [STRING_EXT_VERSION], [])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
