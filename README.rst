@@ -27,8 +27,9 @@ Usage
 -----
 
 After installation, include the header file ``string_ext.h`` to use it.
-Also, link the library file ``/usr/local/lib/libstringext.a`` while compiling
+
+Also, link the library file ``libstringext.a`` while compiling
 
 .. code-block:: bash
 
-   cc <input-file.c> /usr/local/lib/libstringext.a
+   cc <input-file.c> -l:libstringext.a
