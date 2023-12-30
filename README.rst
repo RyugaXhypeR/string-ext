@@ -11,6 +11,8 @@ A wrapper around c-strings to provide high level string functions.
 Installation
 ------------
 
+Install the package from latest releases or clone the repository and cd into its directory.
+
 On Unix, Linux and macOS:
 
 .. code-block:: bash
